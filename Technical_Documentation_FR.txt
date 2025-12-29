@@ -1,0 +1,871 @@
+================================================================================
+RTD MASTER PRO - DOCUMENTATION TECHNIQUE
+================================================================================
+
+VERSION DU DOCUMENT : 1.2
+DERNIÈRE MISE À JOUR : Décembre 2025
+
+================================================================================
+TABLE DES MATIÈRES
+================================================================================
+PARTIE I : RTD (DÉTECTEURS DE TEMPÉRATURE À RÉSISTANCE)
+1. APERÇU GÉNÉRAL
+2. NORMES INTERNATIONALES
+3. MATÉRIAUX ET SPÉCIFICATIONS RTD
+4. MÉTHODES DE CALCUL ET ÉQUATIONS
+5. SPÉCIFICATIONS DE TOLÉRANCE
+6. PLAGES DE TEMPÉRATURE
+7. FONCTIONNALITÉS DU PROGRAMME
+8. IMPLÉMENTATION TECHNIQUE
+9. RÉFÉRENCES
+
+================================================================================
+PARTIE II : THERMOCOUPLES
+10. THERMOCOUPLES - APERÇU GÉNÉRAL
+11. TYPES ET SPÉCIFICATIONS DES THERMOCOUPLES
+12. CALCULS ET ÉQUATIONS DES THERMOCOUPLES
+13. UTILISATION DES THERMOCOUPLES DANS RTD MASTER PRO
+
+
+================================================================================
+PARTIE I : RTD (DÉTECTEURS DE TEMPÉRATURE À RÉSISTANCE)
+================================================================================
+
+1. APERÇU GÉNÉRAL
+================================================================================
+
+RTD Master Pro est une application de bureau de qualité professionnelle conçue
+pour des mesures de température précises utilisant à la fois les capteurs RTD
+(Détecteurs de Température à Résistance) et les thermocouples, conformément à
+plusieurs normes internationales.
+
+CAPTEURS RTD :
+Dispositifs de mesure de température de précision qui exploitent le changement
+prévisible de la résistance électrique des métaux purs en fonction de la
+température.
+
+THERMOCOUPLES :
+Capteurs de température qui génèrent une tension électrique basée sur l'effet
+Seebeck, idéaux pour les températures extrêmes et la réponse rapide.
+
+L'application implémente les équations et coefficients standardisés définis par
+les organisations internationales de métrologie (IEC, NIST, ASTM, GOST).
+
+Les capteurs RTD sont des dispositifs de mesure de température de précision qui
+exploitent le changement prévisible de la résistance électrique des métaux purs
+en fonction de la température. Cette application implémente les équations et
+coefficients standardisés définis par les organisations internationales de
+métrologie.
+
+
+================================================================================
+2. NORMES INTERNATIONALES
+================================================================================
+
+2.1 IEC 60751:2008
+-------------------
+Titre : "Thermomètres à résistance de platine industriels et capteurs de
+        température au platine"
+Organisation : Commission Électrotechnique Internationale
+Portée : Spécifie les exigences et tolérances pour les RTD au platine industriels
+Plage de température (Platine) : -200°C à +850°C
+Coefficient principal : α = 0,00385 Ω/Ω/°C (Pt385)
+Classes de tolérance : AA, A, B (anciennement 1/10 DIN, 1/3 DIN, DIN)
+
+Valeurs standard : Pt100, Pt500, Pt1000
+Coefficients de Callendar-Van Dusen pour Pt385 :
+  A = 3,9083 x 10^-3  °C^-1
+  B = -5,775 x 10^-7  °C^-2
+  C = -4,183 x 10^-12 °C^-4 (pour T < 0°C uniquement)
+
+
+2.2 GOST 6651-2009
+-------------------
+Titre : "Thermomètres à résistance, capteurs de résistance thermique et
+        thermocouples à résistance"
+Organisation : Conseil Interétatique pour la Normalisation (pays de la CEI)
+Portée : Norme russe/soviétique pour les spécifications RTD
+Plage de température (Platine) : -200°C à +600°C
+Coefficient principal : α = 0,00391 Ω/Ω/°C (Pt391)
+
+Coefficients de Callendar-Van Dusen pour Pt391 :
+  A =  3,96847 x 10^-3  °C^-1
+  B = -5,847   x 10^-7  °C^-2
+  C = -4,35    x 10^-12 °C^-4 (pour T < 0°C uniquement)
+
+Note : Spécifie également les RTD en cuivre (Cu426) et en nickel
+
+
+2.3 ASTM E1137/E1137M-20
+-------------------------
+Titre : "Spécification standard pour les thermomètres à résistance de platine
+        industriels"
+Organisation : American Society for Testing and Materials
+Portée : Norme nord-américaine pour les RTD au platine industriels
+Plage de température : -200°C à +850°C
+Coefficient : α = 0,00385 Ω/Ω/°C (identique à IEC 60751)
+
+Note : ASTM E1137 s'aligne sur IEC 60751 pour la compatibilité internationale
+Grades de tolérance : Grade A, Grade B (équivalents aux classes IEC)
+
+
+2.4 Norme américaine héritée
+----------------------------
+Norme américaine historique (avant l'alignement ASTM)
+Coefficient : α = 0,00392 Ω/Ω/°C (Pt392)
+Plage de température : -200°C à +850°C
+
+Coefficients de Callendar-Van Dusen pour Pt392 :
+  A =  3,9848 x 10^-3  °C^-1
+  B = -5,870  x 10^-7  °C^-2
+  C = -4,40   x 10^-12 °C^-4 (pour T < 0°C uniquement)
+
+
+================================================================================
+3. MATÉRIAUX ET SPÉCIFICATIONS RTD
+================================================================================
+
+3.1 RTD AU PLATINE
+------------------
+Matériau RTD le plus courant et le plus stable. Excellente linéarité et stabilité.
+
+Configurations standard :
+┌──────────┬────────────┬────────────────────────────────────────────┐
+│  Type    │  R0 (0°C)  │  Applications courantes                    │
+├──────────┼────────────┼────────────────────────────────────────────┤
+│  Pt100   │  100 Ω     │  Industriel, CVC, contrôle de processus    │
+│  Pt500   │  500 Ω     │  Laboratoire, mesures haute précision      │
+│  Pt1000  │  1000 Ω    │  Automobile, automatisation du bâtiment    │
+└──────────┴────────────┴────────────────────────────────────────────┘
+
+Coefficients de température :
+  α₃₈₅ = 0,00385 Ω/Ω/°C  (IEC 60751, ASTM E1137, DIN 43760)
+  α₃₉₁ = 0,00391 Ω/Ω/°C  (GOST 6651)
+  α₃₉₂ = 0,00392 Ω/Ω/°C  (Héritage américain)
+
+Plage de température typique : -200°C à +850°C (certains jusqu'à +1000°C)
+
+
+3.2 RTD AU CUIVRE
+-----------------
+Faible coût, bonne linéarité, plage de température limitée.
+
+Configurations standard :
+┌──────────┬────────────┬────────────────────────────────────────────┐
+│  Type    │  R0 (0°C)  │  Applications courantes                    │
+├──────────┼────────────┼────────────────────────────────────────────┤
+│  Cu50    │  50 Ω      │  Surveillance température bobinage         │
+│  Cu100   │  100 Ω     │  Surveillance moteurs et transformateurs   │
+└──────────┴────────────┴────────────────────────────────────────────┘
+
+Coefficients de température :
+  α₄₂₆ = 0,00426 Ω/Ω/°C  (GOST 6651)
+  α₄₂₇ = 0,00427 Ω/Ω/°C  (IEC 60751)
+  α₄₂₈ = 0,00428 Ω/Ω/°C  (Certains fabricants)
+
+Plage de température : -50°C à +150°C (oxydation au-dessus de 150°C)
+
+
+3.3 RTD AU NICKEL
+-----------------
+Haute sensibilité, non-linéaire, plage de température modérée.
+
+Configurations standard :
+┌──────────┬────────────┬────────────┬───────────────────────────────┐
+│  Type    │  R0 (0°C)  │  Valeur α  │  Applications courantes       │
+├──────────┼────────────┼────────────┼───────────────────────────────┤
+│  Ni100   │  100 Ω     │  0,00617   │  CVC, usage général           │
+│  Ni120   │  120 Ω     │  0,00672   │  Applications CVC européennes │
+│  Ni1000  │  1000 Ω    │  0,00618   │  Automobile, électroménager   │
+└──────────┴────────────┴────────────┴───────────────────────────────┘
+
+Plage de température : -60°C à +180°C (applications standard)
+
+
+================================================================================
+4. MÉTHODES DE CALCUL ET ÉQUATIONS
+================================================================================
+
+4.1 CALCUL RTD AU PLATINE - Équation de Callendar-Van Dusen
+------------------------------------------------------------
+
+L'équation de Callendar-Van Dusen est la méthode internationalement acceptée
+pour calculer la résistance RTD au platine en fonction de la température.
+
+Pour T ≥ 0°C :
+  R(T) = R₀(1 + AT + BT²)
+
+Pour T < 0°C :
+  R(T) = R₀[1 + AT + BT² + C(T - 100)T³]
+
+Où :
+  R(T) = Résistance à la température T (en Ω)
+  R₀   = Résistance nominale à 0°C (en Ω)
+  T    = Température (en °C)
+  A, B, C = Coefficients de Callendar-Van Dusen
+
+VALEURS DES COEFFICIENTS :
+
+Pt385 (IEC 60751, ASTM E1137) :
+  A =  3,9083 × 10⁻³  °C⁻¹
+  B = -5,775  × 10⁻⁷  °C⁻²
+  C = -4,183  × 10⁻¹² °C⁻⁴
+
+Pt391 (GOST 6651) :
+  A =  3,96847 × 10⁻³  °C⁻¹
+  B = -5,847   × 10⁻⁷  °C⁻²
+  C = -4,35    × 10⁻¹² °C⁻⁴
+
+Pt392 (Héritage américain) :
+  A =  3,9848 × 10⁻³  °C⁻¹
+  B = -5,870  × 10⁻⁷  °C⁻²
+  C = -4,40   × 10⁻¹² °C⁻⁴
+
+
+CALCUL INVERSE (Résistance → Température) :
+
+Pour R ≥ R₀ (T ≥ 0°C) :
+  Résoudre l'équation quadratique : BT² + AT + (1 - R/R₀) = 0
+
+  T = (-A + √(A² - 4B(1 - R/R₀))) / (2B)
+
+Pour R < R₀ (T < 0°C) :
+  Résoudre l'équation cubique de manière itérative en utilisant des méthodes
+  numériques (Newton-Raphson)
+
+
+4.2 CALCUL RTD CUIVRE ET NICKEL - Approximation linéaire
+---------------------------------------------------------
+
+Les RTD en cuivre et en nickel utilisent une relation linéaire simplifiée en
+raison de leurs plages de température plus étroites et de leurs propriétés
+physiques différentes.
+
+Calcul direct (Température → Résistance) :
+  R(T) = R₀(1 + αT)
+
+Calcul inverse (Résistance → Température) :
+  T = (R - R₀) / (R₀ × α)
+
+Où :
+  R(T) = Résistance à la température T (en Ω)
+  R₀   = Résistance nominale à 0°C (en Ω)
+  α    = Coefficient de température de résistance (en Ω/Ω/°C)
+  T    = Température (en °C)
+
+
+COEFFICIENTS CUIVRE :
+  α₄₂₆ = 0,00426 Ω/Ω/°C
+  α₄₂₇ = 0,00427 Ω/Ω/°C
+  α₄₂₈ = 0,00428 Ω/Ω/°C
+
+COEFFICIENTS NICKEL :
+  α₆₁₇ = 0,00617 Ω/Ω/°C (Ni100)
+  α₆₁₈ = 0,00618 Ω/Ω/°C (Ni1000)
+  α₆₇₂ = 0,00672 Ω/Ω/°C (Ni120)
+
+
+================================================================================
+5. SPÉCIFICATIONS DE TOLÉRANCE
+================================================================================
+
+5.1 CLASSES DE TOLÉRANCE IEC 60751 (RTD au platine)
+----------------------------------------------------
+
+Classe AA (Précision la plus élevée) :
+  Tolérance = ±(0,1 + 0,0017|t|) °C
+
+  Exemples :
+    À   0°C : ±0,10°C
+    À  50°C : ±0,185°C
+    À 100°C : ±0,27°C
+    À 200°C : ±0,44°C
+
+Classe A (Précision standard) :
+  Tolérance = ±(0,15 + 0,002|t|) °C
+
+  Exemples :
+    À   0°C : ±0,15°C
+    À  50°C : ±0,25°C
+    À 100°C : ±0,35°C
+    À 200°C : ±0,55°C
+
+Classe B (Usage général) :
+  Tolérance = ±(0,3 + 0,005|t|) °C
+
+  Exemples :
+    À   0°C : ±0,30°C
+    À  50°C : ±0,55°C
+    À 100°C : ±0,80°C
+    À 200°C : ±1,30°C
+
+Classe C (Précision inférieure) :
+  Tolérance = ±(0,6 + 0,01|t|) °C
+
+  Exemples :
+    À   0°C : ±0,60°C
+    À  50°C : ±1,10°C
+    À 100°C : ±1,60°C
+    À 200°C : ±2,60°C
+
+Où |t| est la valeur absolue de la température en °C
+
+
+5.2 TOLÉRANCE DE RÉSISTANCE À 0°C
+----------------------------------
+
+Pour les capteurs Pt100 :
+  Classe AA : ±0,04 Ω à 0°C
+  Classe A :  ±0,06 Ω à 0°C
+  Classe B :  ±0,12 Ω à 0°C
+  Classe C :  ±0,24 Ω à 0°C
+
+
+================================================================================
+6. PLAGES DE TEMPÉRATURE
+================================================================================
+
+6.1 PLAGES DE TEMPÉRATURE PAR NORME ET MATÉRIAU
+------------------------------------------------
+
+┌─────────────────┬───────────────┬───────────────┬───────────────┐
+│  Norme          │  Platine     │  Cuivre      │  Nickel      │
+├─────────────────┼───────────────┼───────────────┼───────────────┤
+│  IEC 60751      │  -200 à 850°C │  -50 à 150°C  │  -60 à 180°C  │
+│  GOST 6651      │  -200 à 600°C │  -50 à 150°C  │  -60 à 180°C  │
+│  ASTM E1137     │  -200 à 850°C │  -50 à 150°C  │  -60 à 180°C  │
+│  Héritage US    │  -200 à 850°C │  -50 à 150°C  │  -60 à 180°C  │
+└─────────────────┴───────────────┴───────────────┴───────────────┘
+
+Note : Les capteurs au platine à plage étendue peuvent atteindre -270°C à
+       +1000°C avec des spécifications de tolérance modifiées.
+
+
+6.2 PLAGES DE RÉSISTANCE POUR Pt100
+------------------------------------
+
+Aux températures minimales et maximales (en utilisant le coefficient Pt385) :
+
+Température    Résistance (Pt100)
+-200°C         18,52 Ω
+-100°C         60,26 Ω
+   0°C        100,00 Ω
+ 100°C        138,51 Ω
+ 200°C        175,86 Ω
+ 400°C        247,09 Ω
+ 600°C        316,16 Ω
+ 850°C        390,48 Ω
+
+
+================================================================================
+7. FONCTIONNALITÉS DU PROGRAMME
+================================================================================
+
+7.1 CAPACITÉS PRINCIPALES
+--------------------------
+- Conversion bidirectionnelle (Température ↔ Résistance)
+- Support de 4 normes internationales
+- 3 types de matériaux RTD (Platine, Cuivre, Nickel)
+- Coefficients alpha multiples par matériau
+- 4 classes de tolérance (AA, A, B, C)
+- Calcul de tolérance en temps réel
+- Ajustement dynamique de la plage en fonction de la norme et de la sélection
+  du matériau
+
+
+7.2 INTERFACE UTILISATEUR
+--------------------------
+- Design professionnel moderne avec sections codées par couleur
+- Polices grandes et lisibles (11-14pt)
+- Sélecteurs déroulants intuitifs
+- Champs d'entrée/sortie clairs avec unités
+- Affichage de tolérance mis en évidence
+- Panneau d'information affichant la configuration actuelle
+- Disposition réactive
+
+
+7.3 CONFIGURATIONS SUPPORTÉES
+------------------------------
+
+RTD au platine :
+  - Pt100, Pt500, Pt1000
+  - Coefficients : 0,00385, 0,00391, 0,00392
+
+RTD au cuivre :
+  - Cu50, Cu100
+  - Coefficients : 0,00426, 0,00427, 0,00428
+
+RTD au nickel :
+  - Ni100, Ni120, Ni1000
+  - Coefficients : 0,00617, 0,00618, 0,00672
+
+
+================================================================================
+8. IMPLÉMENTATION TECHNIQUE
+================================================================================
+
+8.1 ARCHITECTURE LOGICIELLE
+----------------------------
+Langage : C++17
+Framework GUI : Qt 5.x / 6.x
+Système de compilation : qmake
+Support de plateforme : Windows, Linux, macOS
+
+Composants :
+  - rtdcalculator.cpp/h : Moteur de calcul principal
+  - mainwindow.cpp/h : Logique GUI et gestion des événements
+  - mainwindow.ui : Définition de l'interface Qt Designer
+  - main.cpp : Point d'entrée de l'application
+
+
+8.2 PRÉCISION DES CALCULS
+--------------------------
+- Arithmétique en virgule flottante double précision (IEEE 754)
+- Précision numérique : ~15-17 chiffres décimaux significatifs
+- Solveur itératif pour Callendar-Van Dusen inverse (T < 0°C)
+- Tolérance de convergence : 1×10⁻⁶ °C
+
+
+8.3 VALIDATION DES ENTRÉES
+---------------------------
+- Application de la plage de température basée sur la norme sélectionnée
+- Calcul automatique de la plage de résistance basé sur R₀ et les coefficients
+- Prévention des calculs hors plage
+- Mises à jour automatiques de la plage lors des changements de configuration
+
+
+================================================================================
+9. RÉFÉRENCES
+================================================================================
+
+[1] IEC 60751:2008
+    "Thermomètres à résistance de platine industriels et capteurs de
+     température au platine"
+    Commission Électrotechnique Internationale, 2008
+
+[2] GOST 6651-2009
+    "Thermomètres à résistance, capteurs de résistance thermique et
+     thermocouples à résistance. Exigences techniques générales et méthodes
+     d'essai"
+    Conseil Interétatique pour la Normalisation, la Métrologie et la
+    Certification, 2009
+
+[3] ASTM E1137/E1137M-20
+    "Spécification standard pour les thermomètres à résistance de platine
+     industriels"
+    ASTM International, 2020
+
+[4] DIN EN 60751:2009-05
+    "Thermomètres à résistance de platine industriels et capteurs de
+     température au platine (IEC 60751:2008)"
+    Institut Allemand de Normalisation, 2009
+
+[5] H.D. Burns et M. Scroger
+    "L'équation de Callendar-Van Dusen et son application"
+    Note technique NIST, 1988
+
+[6] Nicholas, J.V., White, D.R.
+    "Températures traçables : Une introduction à la mesure et à l'étalonnage
+     de la température"
+    John Wiley & Sons, 2001
+
+
+================================================================================
+ANNEXE A : FORMULES DE RÉFÉRENCE RAPIDE
+================================================================================
+
+Pt100 à la température T (Pt385) :
+  0°C :  R = 100,00 Ω
+  Température vers Résistance : R = 100(1 + 0,0039083T - 0,0000005775T²)
+
+Cu100 à la température T (Cu427) :
+  0°C :  R = 100,00 Ω
+  Température vers Résistance : R = 100(1 + 0,00427T)
+
+Ni100 à la température T (Ni617) :
+  0°C :  R = 100,00 Ω
+  Température vers Résistance : R = 100(1 + 0,00617T)
+
+
+================================================================================
+
+
+
+================================================================================
+PARTIE II : THERMOCOUPLES
+================================================================================
+
+ THERMOCOUPLES -1. APERÇU GÉNÉRAL
+================================================================================
+
+10.1 QU'EST-CE QU'UN THERMOCOUPLE ?
+------------------------------------
+Un thermocouple est un capteur de température qui génère une tension électrique
+(force électromotrice thermoélectrique) proportionnelle à la différence de
+température entre deux jonctions de métaux différents. Il est basé sur l'effet
+Seebeck, découvert en 1821 par Thomas Johann Seebeck.
+
+Principe de fonctionnement :
+- Deux fils de métaux différents sont joints à une extrémité (jonction de mesure)
+- L'autre extrémité est à une température de référence (jonction froide)
+- La différence de température génère une petite tension (µV-mV)
+- La tension est directement proportionnelle à la température mesurée
+
+
+10.2 COMPARAISON RTD vs THERMOCOUPLE
+-------------------------------------
+
+┌────────────────────────┬─────────────────────────┬─────────────────────────┐
+│ Caractéristique        │ RTD                     │ Thermocouple            │
+├────────────────────────┼─────────────────────────┼─────────────────────────┤
+│ Principe               │ Résistance électrique   │ Tension thermoélectrique│
+│ Signal de sortie       │ Ohm (Ω)                 │ Millivolt (mV)          │
+│ Plage de température   │ -200°C à +850°C         │ -270°C à +1820°C        │
+│ Précision              │ ±0,1°C à ±0,001°C       │ ±0,5°C à ±2°C           │
+│ Temps de réponse       │ Lent (secondes)         │ Rapide (millisecondes)  │
+│ Stabilité              │ Excellente              │ Bonne (dérive dans le   │
+│                        │                         │ temps)                  │
+│ Coût                   │ Plus élevé              │ Plus faible             │
+│ Alimentation électrique│ Requise (courant)       │ Auto-générateur         │
+│ Taille                 │ Plus grande             │ Très petite (ponctuelle)│
+│ Linéarité              │ Bonne                   │ Non-linéaire            │
+└────────────────────────┴─────────────────────────┴─────────────────────────┘
+
+
+11. TYPES ET SPÉCIFICATIONS DES THERMOCOUPLES
+-----------------------------------------
+
+11.1 TYPE K (CHROMEL-ALUMEL)
+----------------------------
+Le type de thermocouple le plus courant pour usage général et industriel.
+
+Matériaux :
+  Positif (+) : Chromel (90% Nickel, 10% Chrome)
+  Négatif (-) : Alumel (95% Nickel, 2% Manganèse, 2% Aluminium, 1% Silicium)
+
+Spécifications :
+  Plage de température : -270°C à +1372°C
+  Sensibilité à 0°C : ~41 µV/°C
+  Code couleur : Jaune
+  Norme : IEC 60584, ASTM E230
+
+Applications :
+  - Industriel usage général
+  - Systèmes CVC
+  - Contrôle de processus
+  - Fours et chaudières
+
+Avantages :
+  + Large plage de température
+  + Faible coût
+  + Bonne résistance à l'oxydation
+  + Largement disponible
+
+Inconvénients :
+  - Dérive magnétique au-dessus de 800°C
+  - Non adapté aux atmosphères réductrices
+  - Précision modérée
+
+
+11.2 TYPE J (FER-CONSTANTAN)
+-----------------------------
+Thermocouple pour l'industrie du fer/acier et atmosphères réductrices.
+
+Matériaux :
+  Positif (+) : Fer (Fe)
+  Négatif (-) : Constantan (55% Cuivre, 45% Nickel)
+
+Spécifications :
+  Plage de température : -210°C à +1200°C
+  Sensibilité à 0°C : ~52 µV/°C (la plus élevée)
+  Code couleur : Noir
+  Norme : IEC 60584, ASTM E230
+
+Applications :
+  - Industrie du fer et de l'acier
+  - Atmosphères réductrices
+  - Applications à budget limité
+  - Équipement hérité
+
+Avantages :
+  + Haute sensibilité
+  + Très faible coût
+  + Bon pour températures moyennes
+
+Inconvénients :
+  - Oxydation rapide au-dessus de 540°C
+  - Non adapté aux atmosphères oxydantes
+  - Plage plus limitée que le Type K
+
+
+11.3 TYPE T (CUIVRE-CONSTANTAN)
+--------------------------------
+Thermocouple pour applications cryogéniques et de laboratoire.
+
+Matériaux :
+  Positif (+) : Cuivre (Cu)
+  Négatif (-) : Constantan (55% Cuivre, 45% Nickel)
+
+Spécifications :
+  Plage de température : -270°C à +400°C
+  Sensibilité à 0°C : ~41 µV/°C
+  Code couleur : Bleu
+  Norme : IEC 60584, ASTM E230
+
+Applications :
+  - Cryogénie et basses températures
+  - Industrie alimentaire
+  - Laboratoire et recherche
+  - Environnements corrosifs
+
+Avantages :
+  + Excellent pour basses températures
+  + Très bonne linéarité
+  + Résistant à l'humidité
+  + Bonne précision
+
+Inconvénients :
+  - Plage limitée (max 400°C)
+  - Le cuivre s'oxyde au-dessus de 400°C
+
+
+11.4 TYPE E (CHROMEL-CONSTANTAN)
+---------------------------------
+Thermocouple avec la sensibilité la plus élevée (sortie maximale).
+
+Matériaux :
+  Positif (+) : Chromel (90% Nickel, 10% Chrome)
+  Négatif (-) : Constantan (55% Cuivre, 45% Nickel)
+
+Spécifications :
+  Plage de température : -270°C à +1000°C
+  Sensibilité à 0°C : ~61 µV/°C (maximum !)
+  Code couleur : Violet
+  Norme : IEC 60584, ASTM E230
+
+Applications :
+  - Cryogénie
+  - Production d'énergie
+  - Détection précise de petits changements
+
+Avantages :
+  + Sensibilité maximale (signal important)
+  + Excellent rapport signal/bruit
+  + Bonne résistance à la corrosion
+
+Inconvénients :
+  - Coût plus élevé
+  - Moins couramment utilisé (disponibilité limitée)
+
+
+11.5 TYPE N (NICROSIL-NISIL)
+-----------------------------
+Thermocouple moderne avec stabilité améliorée aux hautes températures.
+
+Matériaux :
+  Positif (+) : Nicrosil (84,4% Ni, 14,2% Cr, 1,4% Si)
+  Négatif (-) : Nisil (95,5% Ni, 4,4% Si, 0,1% Mg)
+
+Spécifications :
+  Plage de température : -270°C à +1300°C
+  Sensibilité à 0°C : ~27 µV/°C
+  Code couleur : Orange
+  Norme : IEC 60584
+
+Applications :
+  - Remplacement du Type K (meilleure stabilité)
+  - Hautes températures
+  - Atmosphères oxydantes
+
+Avantages :
+  + Stabilité supérieure au Type K
+  + Pas de dérive magnétique
+  + Excellente résistance à l'oxydation
+
+Inconvénients :
+  - Coût plus élevé que le Type K
+  - Sensibilité plus faible
+
+
+11.6 TYPE S, R, B (MÉTAUX NOBLES - PLATINE)
+--------------------------------------------
+Thermocouples au platine pour très hautes températures et précision maximale.
+
+TYPE S : Platine-Platine/Rhodium 10%
+  Plage : -50°C à +1768°C
+  Sensibilité : ~6 µV/°C
+  Applications : Pharmaceutique, biotechnologie, étalons de laboratoire
+
+TYPE R : Platine-Platine/Rhodium 13%
+  Plage : -50°C à +1768°C
+  Sensibilité : ~6 µV/°C
+  Applications : Étalons d'étalonnage, très hautes températures
+
+TYPE B : Platine/Rhodium 30%-Platine/Rhodium 6%
+  Plage : +200°C à +1820°C
+  Sensibilité : ~1 µV/°C (très faible !)
+  Applications : Fabrication du verre, fours très chauds
+
+Avantages :
+  + Précision maximale
+  + Excellente stabilité
+  + Températures extrêmes
+
+Inconvénients :
+  - Coût extrêmement élevé
+  - Sensibilité très faible (bruit)
+  - Fragile (nécessite une protection)
+
+
+12. CALCULS ET ÉQUATIONS DES THERMOCOUPLES
+--------------------------------------------
+
+12.1 POLYNÔMES NIST ITS-90
+---------------------------
+La norme NIST (National Institute of Standards and Technology) définit des
+polynômes de haute précision pour la conversion température ↔ tension.
+
+Forme générale pour TEMPÉRATURE → TENSION :
+
+  V(T) = c₀ + c₁·T + c₂·T² + c₃·T³ + ... + cₙ·Tⁿ
+
+Où :
+  V = Tension en millivolts (mV)
+  T = Température en degrés Celsius (°C)
+  c₀, c₁, ..., cₙ = Coefficients polynomiaux spécifiques au type
+
+Pour Type K (0°C à 1372°C) :
+  V(T) = c₀ + c₁·T + c₂·T² + ... + c₉·T⁹ + a₀·exp[a₁(T-a₂)²]
+
+  Coefficients (5 premiers) :
+    c₀ = -0,176004136860 x 10⁻¹
+    c₁ =  0,389212049750 x 10⁻¹
+    c₂ =  0,185587700320 x 10⁻⁴
+    c₃ = -0,994575928740 x 10⁻⁷
+    c₄ =  0,318409457190 x 10⁻⁹
+    ...plus terme exponentiel
+
+
+12.2 COMPENSATION DE JONCTION FROIDE
+-------------------------------------
+Les thermocouples mesurent la différence de température entre deux jonctions.
+Pour obtenir la température absolue, la température de la jonction froide doit
+être compensée (Compensation de Jonction Froide - CJC).
+
+Température mesurée = Température calculée à partir de V + Température jonction froide
+
+Méthodes CJC :
+1. Bain de glace à 0°C (laboratoire)
+2. Capteur RTD/thermistance à la jonction (industriel)
+3. Compensation électronique (circuits spécialisés)
+
+Dans RTD Master Pro :
+- L'utilisateur peut définir manuellement la température de jonction froide
+- Valeur par défaut : 25°C (température ambiante)
+- Calcul automatique avec compensation
+
+
+12.3 CALCUL INVERSE (TENSION → TEMPÉRATURE)
+--------------------------------------------
+Pour la conversion inverse, la méthode de Newton-Raphson est utilisée pour
+résoudre l'équation polynomiale de manière itérative.
+
+Algorithme :
+1. Compensation CJC : V_compensée = V_mesurée + V(T_jonction_froide)
+2. Estimation initiale : T₀ = 0°C
+3. Itération Newton-Raphson :
+   T_(n+1) = T_n - [V(T_n) - V_compensée] / [dV/dT(T_n)]
+4. Répéter jusqu'à convergence (|T_(n+1) - T_n| < tolérance)
+
+
+13. UTILISATION DES THERMOCOUPLES DANS RTD MASTER PRO
+-------------------------------------------
+
+13.1 SÉLECTION DU MODE THERMOCOUPLE
+------------------------------------
+1. Ouvrir RTD Master Pro
+2. Dans la section "Mode de mesure", sélectionner "Thermocouple"
+3. L'interface basculera pour afficher les contrôles spécifiques aux thermocouples
+
+13.2 CONFIGURATION DU THERMOCOUPLE
+-----------------------------------
+1. Type : Sélectionner le type de thermocouple (K, J, T, E, N, S, R, B)
+2. Plage : Affichée automatiquement pour le type sélectionné
+3. Sensibilité : Affichée automatiquement (µV/°C)
+4. Temp. jonction froide : Définir la température de jonction froide (défaut 25°C)
+
+13.3 CONVERSIONS SUPPORTÉES
+----------------------------
+
+MODE 1 : TEMPÉRATURE → TENSION
+  Entrée : Température en °C
+  Sortie : Tension en mV
+  Exemple Type K :
+    500°C → 20,644 mV
+
+MODE 2 : TENSION → TEMPÉRATURE
+  Entrée : Tension en mV
+  Sortie : Température en °C (avec compensation CJC)
+  Exemple Type K :
+    20,644 mV (CJC=25°C) → ~500°C
+
+13.4 EXEMPLES PRATIQUES
+-----------------------
+
+Exemple 1 : Mesure de température de four avec Type K
+  - Tension mesurée : 35,2 mV
+  - Jonction froide : 23°C
+  - Sélectionner : Type K, Tension → Température
+  - Entrée : 35,2 mV, CJC : 23°C
+  - Sortie : ~852°C
+
+Exemple 2 : Calculer la tension attendue Type J
+  - Température du four : 600°C
+  - Sélectionner : Type J, Température → Tension
+  - Entrée : 600°C
+  - Sortie : ~33,277 mV
+
+
+================================================================================
+ANNEXE B : FORMULES DE RÉFÉRENCE RAPIDE DES THERMOCOUPLES
+================================================================================
+
+TYPE K (0°C à 500°C - approximation simplifiée) :
+  V(T) ≈ 0,04 mV/°C × T
+  Exemple : 100°C → ~4,0 mV
+
+TYPE J (0°C à 500°C) :
+  V(T) ≈ 0,05 mV/°C × T
+  Exemple : 100°C → ~5,0 mV
+
+TYPE T (0°C à 200°C) :
+  V(T) ≈ 0,04 mV/°C × T
+  Exemple : 100°C → ~4,0 mV
+
+Note : Ce sont des approximations linéaires. Pour une précision maximale,
+       l'application utilise les polynômes NIST ITS-90 complets.
+
+
+================================================================================
+RÉFÉRENCES SUPPLÉMENTAIRES SUR LES THERMOCOUPLES
+================================================================================
+
+[7] IEC 60584-1:2013
+    "Thermocouples - Partie 1 : Spécifications et tolérances de FEM"
+    Commission Électrotechnique Internationale, 2013
+
+[8] ASTM E230/E230M-17
+    "Spécification standard et tableaux de température-force électromotrice
+     (FEM) pour les thermocouples standardisés"
+    ASTM International, 2017
+
+[9] Base de données NIST ITS-90 sur les thermocouples
+    https://srdata.nist.gov/its90/main/
+    National Institute of Standards and Technology
+
+[10] Manuel sur l'utilisation des thermocouples dans la mesure de température
+     Série de manuels ASTM MNL 12, Quatrième édition, 1993
+
+================================================================================
+FIN DE LA DOCUMENTATION TECHNIQUE
+================================================================================

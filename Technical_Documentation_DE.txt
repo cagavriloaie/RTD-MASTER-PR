@@ -1,0 +1,865 @@
+================================================================================
+RTD MASTER PRO - TECHNISCHE DOKUMENTATION
+================================================================================
+
+DOKUMENTVERSION: 1.2
+LETZTE AKTUALISIERUNG: Dezember 2025
+
+================================================================================
+INHALTSVERZEICHNIS
+================================================================================
+TEIL I: RTD (WIDERSTANDSTHERMOMETER)
+1. ÜBERBLICK
+2. INTERNATIONALE STANDARDS
+3. RTD-MATERIALIEN UND SPEZIFIKATIONEN
+4. BERECHNUNGSMETHODEN UND GLEICHUNGEN
+5. TOLERANZSPEZIFIKATIONEN
+6. TEMPERATURBEREICHE
+7. PROGRAMMFUNKTIONEN
+8. TECHNISCHE IMPLEMENTIERUNG
+9. REFERENZEN
+
+================================================================================
+TEIL II: THERMOELEMENTE
+10. THERMOELEMENTE - ALLGEMEINE ÜBERSICHT
+11. THERMOELEMENT-TYPEN UND SPEZIFIKATIONEN
+12. THERMOELEMENT-BERECHNUNGEN UND GLEICHUNGEN
+13. VERWENDUNG VON THERMOELEMENTEN IN RTD MASTER PRO
+
+
+================================================================================
+TEIL I: RTD (WIDERSTANDSTHERMOMETER)
+================================================================================
+
+1. ÜBERBLICK
+================================================================================
+
+RTD Master Pro ist eine professionelle Desktop-Anwendung für präzise
+Temperaturmessungen mit RTD-Sensoren (Widerstandsthermometer) und
+Thermoelementen gemäß mehreren internationalen Standards.
+
+RTD-SENSOREN:
+Präzise Temperaturmessgeräte, die die vorhersagbare Änderung des
+elektrischen Widerstands reiner Metalle mit der Temperatur ausnutzen.
+
+THERMOELEMENTE:
+Temperatursensoren, die elektrische Spannung basierend auf dem Seebeck-Effekt
+erzeugen, ideal für extreme Temperaturen und schnelle Ansprechzeiten.
+
+Die Anwendung implementiert standardisierte Gleichungen und Koeffizienten,
+die von internationalen Metrologie-Organisationen definiert wurden
+(IEC, NIST, ASTM, GOST).
+
+RTD-Sensoren sind Präzisionstemperaturmessgeräte, die die vorhersehbare
+Änderung des elektrischen Widerstands reiner Metalle mit der Temperatur nutzen.
+Diese Anwendung implementiert die standardisierten Gleichungen und Koeffizienten,
+die von internationalen metrologischen Organisationen definiert wurden.
+
+
+================================================================================
+2. INTERNATIONALE STANDARDS
+================================================================================
+
+2.1 IEC 60751:2008
+-------------------
+Titel: "Industrielle Platin-Widerstandsthermometer und Platin-
+       Temperatursensoren"
+Organisation: Internationale Elektrotechnische Kommission
+Anwendungsbereich: Spezifiziert Anforderungen und Toleranzen für industrielle
+                    Platin-RTDs
+Temperaturbereich (Platin): -200°C bis +850°C
+Hauptkoeffizient: alpha = 0.00385 Ohm/Ohm/°C (Pt385)
+Toleranzklassen: AA, A, B (früher 1/10 DIN, 1/3 DIN, DIN)
+
+Standardwerte: Pt100, Pt500, Pt1000
+Callendar-Van Dusen Koeffizienten für Pt385:
+  A = 3.9083 x 10^-3  °C^-1
+  B = -5.775 x 10^-7  °C^-2
+  C = -4.183 x 10^-12 °C^-4 (nur für T < 0°C)
+
+
+2.2 GOST 6651-2009
+-------------------
+Titel: "Widerstandsthermometer, Thermische Widerstandssensoren und
+       Widerstands-Thermoelemente"
+Organisation: Zwischenstaatlicher Rat für Standardisierung (GUS-Länder)
+Anwendungsbereich: Russischer/sowjetischer Standard für RTD-Spezifikationen
+Temperaturbereich (Platin): -200°C bis +600°C
+Hauptkoeffizient: alpha = 0.00391 Ohm/Ohm/°C (Pt391)
+
+Callendar-Van Dusen Koeffizienten für Pt391:
+  A =  3.96847 x 10^-3  °C^-1
+  B = -5.847   x 10^-7  °C^-2
+  C = -4.35    x 10^-12 °C^-4 (nur für T < 0°C)
+
+Hinweis: Spezifiziert auch Kupfer (Cu426) und Nickel RTDs
+
+
+2.3 ASTM E1137/E1137M-20
+-------------------------
+Titel: "Standardspezifikation für Industrielle Platin-Widerstandsthermometer"
+Organisation: American Society for Testing and Materials
+Anwendungsbereich: Nordamerikanischer Standard für industrielle Platin-RTDs
+Temperaturbereich: -200°C bis +850°C
+Koeffizient: alpha = 0.00385 Ohm/Ohm/°C (gleich wie IEC 60751)
+
+Hinweis: ASTM E1137 ist an IEC 60751 für internationale Kompatibilität
+         angepasst
+Toleranzgrade: Grad A, Grad B (entspricht IEC-Klassen)
+
+
+2.4 Legacy US-Standard
+-----------------------
+Historischer amerikanischer Standard (vor ASTM-Angleichung)
+Koeffizient: alpha = 0.00392 Ohm/Ohm/°C (Pt392)
+Temperaturbereich: -200°C bis +850°C
+
+Callendar-Van Dusen Koeffizienten für Pt392:
+  A =  3.9848 x 10^-3  °C^-1
+  B = -5.870  x 10^-7  °C^-2
+  C = -4.40   x 10^-12 °C^-4 (nur für T < 0°C)
+
+
+================================================================================
+3. RTD-MATERIALIEN UND SPEZIFIKATIONEN
+================================================================================
+
+3.1 PLATIN-RTDs
+----------------
+Häufigstes und stabilstes RTD-Material. Ausgezeichnete Linearität und Stabilität.
+
+Standardkonfigurationen:
++-------------+----------------+----------------------------------------------+
+|  Typ        |  R0 (0°C)      |  Übliche Anwendungen                         |
++-------------+----------------+----------------------------------------------+
+|  Pt100      |  100 Ohm       |  Industrie, HLK, Prozesskontrolle            |
+|  Pt500      |  500 Ohm       |  Labor, hochpräzise Messungen                |
+|  Pt1000     |  1000 Ohm      |  Automotive, Gebäudeautomation               |
++-------------+----------------+----------------------------------------------+
+
+Temperaturkoeffizienten:
+  alpha_385 = 0.00385 Ohm/Ohm/°C  (IEC 60751, ASTM E1137, DIN 43760)
+  alpha_391 = 0.00391 Ohm/Ohm/°C  (GOST 6651)
+  alpha_392 = 0.00392 Ohm/Ohm/°C  (Legacy US)
+
+Typischer Temperaturbereich: -200°C bis +850°C (einige bis +1000°C)
+
+
+3.2 KUPFER-RTDs
+----------------
+Niedrige Kosten, gute Linearität, begrenzter Temperaturbereich.
+
+Standardkonfigurationen:
++-------------+----------------+----------------------------------------------+
+|  Typ        |  R0 (0°C)      |  Übliche Anwendungen                         |
++-------------+----------------+----------------------------------------------+
+|  Cu50       |  50 Ohm        |  Wicklungstemperaturüberwachung              |
+|  Cu100      |  100 Ohm       |  Motor- und Transformatorüberwachung         |
++-------------+----------------+----------------------------------------------+
+
+Temperaturkoeffizienten:
+  alpha_426 = 0.00426 Ohm/Ohm/°C  (GOST 6651)
+  alpha_427 = 0.00427 Ohm/Ohm/°C  (IEC 60751)
+  alpha_428 = 0.00428 Ohm/Ohm/°C  (Einige Hersteller)
+
+Temperaturbereich: -50°C bis +150°C (Oxidation über 150°C)
+
+
+3.3 NICKEL-RTDs
+----------------
+Hohe Empfindlichkeit, nichtlinear, moderater Temperaturbereich.
+
+Standardkonfigurationen:
++-------------+----------------+------------------+---------------------------------+
+|  Typ        |  R0 (0°C)      |  alpha-Wert      |  Übliche Anwendungen            |
++-------------+----------------+------------------+---------------------------------+
+|  Ni100      |  100 Ohm       |  0.00617         |  HLK, allgemeine Verwendung     |
+|  Ni120      |  120 Ohm       |  0.00672         |  Europäische HLK-Anwendungen    |
+|  Ni1000     |  1000 Ohm      |  0.00618         |  Automotive, Haushaltsgeräte    |
++-------------+----------------+------------------+---------------------------------+
+
+Temperaturbereich: -60°C bis +180°C (Standardanwendungen)
+
+
+================================================================================
+4. BERECHNUNGSMETHODEN UND GLEICHUNGEN
+================================================================================
+
+4.1 PLATIN-RTD-BERECHNUNG - Callendar-Van Dusen Gleichung
+-----------------------------------------------------------
+
+Die Callendar-Van Dusen-Gleichung ist die international anerkannte Methode zur
+Berechnung des Platin-RTD-Widerstands als Funktion der Temperatur.
+
+Für T >= 0°C:
+  R(T) = R0(1 + AT + BT^2)
+
+Für T < 0°C:
+  R(T) = R0[1 + AT + BT^2 + C(T - 100)T^3]
+
+Wobei:
+  R(T) = Widerstand bei Temperatur T (in Ohm)
+  R0   = Nennwiderstand bei 0°C (in Ohm)
+  T    = Temperatur (in °C)
+  A, B, C = Callendar-Van Dusen Koeffizienten
+
+KOEFFIZIENTENWERTE:
+
+Pt385 (IEC 60751, ASTM E1137):
+  A =  3.9083  x 10^-3  °C^-1
+  B = -5.775   x 10^-7  °C^-2
+  C = -4.183   x 10^-12 °C^-4
+
+Pt391 (GOST 6651):
+  A =  3.96847 x 10^-3  °C^-1
+  B = -5.847   x 10^-7  °C^-2
+  C = -4.35    x 10^-12 °C^-4
+
+Pt392 (Legacy US):
+  A =  3.9848  x 10^-3  °C^-1
+  B = -5.870   x 10^-7  °C^-2
+  C = -4.40    x 10^-12 °C^-4
+
+
+UMKEHRBERECHNUNG (Widerstand -> Temperatur):
+
+Für R >= R0 (T >= 0°C):
+  Löse quadratische Gleichung: BT^2 + AT + (1 - R/R0) = 0
+
+  T = (-A + sqrt(A^2 - 4B(1 - R/R0))) / (2B)
+
+Für R < R0 (T < 0°C):
+  Löse kubische Gleichung iterativ mit numerischen Methoden (Newton-Raphson)
+
+
+4.2 KUPFER- UND NICKEL-RTD-BERECHNUNG - Lineare Näherung
+----------------------------------------------------------
+
+Kupfer- und Nickel-RTDs verwenden eine vereinfachte lineare Beziehung aufgrund
+ihrer engeren Temperaturbereiche und unterschiedlichen physikalischen
+Eigenschaften.
+
+Vorwärtsberechnung (Temperatur -> Widerstand):
+  R(T) = R0(1 + alpha*T)
+
+Umkehrberechnung (Widerstand -> Temperatur):
+  T = (R - R0) / (R0 x alpha)
+
+Wobei:
+  R(T) = Widerstand bei Temperatur T (in Ohm)
+  R0   = Nennwiderstand bei 0°C (in Ohm)
+  alpha = Temperaturkoeffizient des Widerstands (in Ohm/Ohm/°C)
+  T    = Temperatur (in °C)
+
+
+KUPFERKOEFFIZIENTEN:
+  alpha_426 = 0.00426 Ohm/Ohm/°C
+  alpha_427 = 0.00427 Ohm/Ohm/°C
+  alpha_428 = 0.00428 Ohm/Ohm/°C
+
+NICKELKOEFFIZIENTEN:
+  alpha_617 = 0.00617 Ohm/Ohm/°C (Ni100)
+  alpha_618 = 0.00618 Ohm/Ohm/°C (Ni1000)
+  alpha_672 = 0.00672 Ohm/Ohm/°C (Ni120)
+
+
+================================================================================
+5. TOLERANZSPEZIFIKATIONEN
+================================================================================
+
+5.1 IEC 60751 TOLERANZKLASSEN (Platin-RTDs)
+---------------------------------------------
+
+Klasse AA (Höchste Präzision):
+  Toleranz = ±(0.1 + 0.0017|t|) °C
+
+  Beispiele:
+    Bei   0°C: ±0.10°C
+    Bei  50°C: ±0.185°C
+    Bei 100°C: ±0.27°C
+    Bei 200°C: ±0.44°C
+
+Klasse A (Standardpräzision):
+  Toleranz = ±(0.15 + 0.002|t|) °C
+
+  Beispiele:
+    Bei   0°C: ±0.15°C
+    Bei  50°C: ±0.25°C
+    Bei 100°C: ±0.35°C
+    Bei 200°C: ±0.55°C
+
+Klasse B (Allgemeine Verwendung):
+  Toleranz = ±(0.3 + 0.005|t|) °C
+
+  Beispiele:
+    Bei   0°C: ±0.30°C
+    Bei  50°C: ±0.55°C
+    Bei 100°C: ±0.80°C
+    Bei 200°C: ±1.30°C
+
+Klasse C (Niedrigere Präzision):
+  Toleranz = ±(0.6 + 0.01|t|) °C
+
+  Beispiele:
+    Bei   0°C: ±0.60°C
+    Bei  50°C: ±1.10°C
+    Bei 100°C: ±1.60°C
+    Bei 200°C: ±2.60°C
+
+Wobei |t| der Absolutwert der Temperatur in °C ist
+
+
+5.2 WIDERSTANDSTOLERANZ BEI 0°C
+--------------------------------
+
+Für Pt100-Sensoren:
+  Klasse AA: ±0.04 Ohm bei 0°C
+  Klasse A:  ±0.06 Ohm bei 0°C
+  Klasse B:  ±0.12 Ohm bei 0°C
+  Klasse C:  ±0.24 Ohm bei 0°C
+
+
+================================================================================
+6. TEMPERATURBEREICHE
+================================================================================
+
+6.1 TEMPERATURBEREICHE NACH STANDARD UND MATERIAL
+---------------------------------------------------
+
++----------------------+-------------------+-------------------+-------------------+
+|  Standard            |  Platin           |  Kupfer           |  Nickel           |
++----------------------+-------------------+-------------------+-------------------+
+|  IEC 60751           | -200 bis 850°C    | -50 bis 150°C     | -60 bis 180°C     |
+|  GOST 6651           | -200 bis 600°C    | -50 bis 150°C     | -60 bis 180°C     |
+|  ASTM E1137          | -200 bis 850°C    | -50 bis 150°C     | -60 bis 180°C     |
+|  Legacy US           | -200 bis 850°C    | -50 bis 150°C     | -60 bis 180°C     |
++----------------------+-------------------+-------------------+-------------------+
+
+Hinweis: Erweiterte Platinsensoren können -270°C bis +1000°C mit modifizierten
+         Toleranzspezifikationen erreichen.
+
+
+6.2 WIDERSTANDSBEREICHE FÜR Pt100
+-----------------------------------
+
+Bei Minimal- und Maximaltemperaturen (unter Verwendung des Pt385-Koeffizienten):
+
+Temperatur    Widerstand (Pt100)
+-200°C         18.52 Ohm
+-100°C         60.26 Ohm
+   0°C        100.00 Ohm
+ 100°C        138.51 Ohm
+ 200°C        175.86 Ohm
+ 400°C        247.09 Ohm
+ 600°C        316.16 Ohm
+ 850°C        390.48 Ohm
+
+
+================================================================================
+7. PROGRAMMFUNKTIONEN
+================================================================================
+
+7.1 KERNFUNKTIONEN
+-------------------
+- Bidirektionale Umwandlung (Temperatur <-> Widerstand)
+- Unterstützung für 4 internationale Standards
+- 3 RTD-Materialtypen (Platin, Kupfer, Nickel)
+- Mehrere Alpha-Koeffizienten pro Material
+- 4 Toleranzklassen (AA, A, B, C)
+- Echtzeit-Toleranzberechnung
+- Dynamische Bereichsanpassung basierend auf Standard- und Materialauswahl
+
+
+7.2 BENUTZEROBERFLÄCHE
+-----------------------
+- Modernes professionelles Design mit farbcodierten Abschnitten
+- Große, lesbare Schriften (11-14pt)
+- Intuitive Dropdown-Auswahlen
+- Klare Eingabe-/Ausgabefelder mit Einheiten
+- Hervorgehobene Toleranzanzeige
+- Informationsfeld mit aktueller Konfiguration
+- Responsives Layout
+- Mehrsprachige Unterstützung (Englisch, Rumänisch, Deutsch)
+
+
+7.3 UNTERSTÜTZTE KONFIGURATIONEN
+----------------------------------
+
+Platin-RTDs:
+  - Pt100, Pt500, Pt1000
+  - Koeffizienten: 0.00385, 0.00391, 0.00392
+
+Kupfer-RTDs:
+  - Cu50, Cu100
+  - Koeffizienten: 0.00426, 0.00427, 0.00428
+
+Nickel-RTDs:
+  - Ni100, Ni120, Ni1000
+  - Koeffizienten: 0.00617, 0.00618, 0.00672
+
+
+================================================================================
+8. TECHNISCHE IMPLEMENTIERUNG
+================================================================================
+
+8.1 SOFTWARE-ARCHITEKTUR
+-------------------------
+Sprache: C++17
+GUI-Framework: Qt 5.x / 6.x
+Build-System: qmake
+Plattformunterstützung: Windows, Linux, macOS
+
+Komponenten:
+  - rtdcalculator.cpp/h: Kern-Berechnungsmotor
+  - mainwindow.cpp/h: GUI-Logik und Ereignisbehandlung
+  - mainwindow.ui: Qt Designer Schnittstellendefinition
+  - main.cpp: Anwendungseinstiegspunkt
+
+
+8.2 BERECHNUNGSGENAUIGKEIT
+----------------------------
+- Gleitkomma-Arithmetik mit doppelter Genauigkeit (IEEE 754)
+- Numerische Präzision: ~15-17 signifikante Dezimalstellen
+- Iterativer Löser für inverse Callendar-Van Dusen (T < 0°C)
+- Konvergenztoleranz: 1 x 10^-6 °C
+
+
+8.3 EINGABEVALIDIERUNG
+-----------------------
+- Temperaturbereichsdurchsetzung basierend auf ausgewähltem Standard
+- Automatische Widerstandsbereichsberechnung basierend auf R0 und Koeffizienten
+- Verhinderung von Berechnungen außerhalb des Bereichs
+- Automatische Bereichsaktualisierungen bei Konfigurationsänderungen
+
+
+================================================================================
+9. REFERENZEN
+================================================================================
+
+[1] IEC 60751:2008
+    "Industrielle Platin-Widerstandsthermometer und Platin-Temperatursensoren"
+    Internationale Elektrotechnische Kommission, 2008
+
+[2] GOST 6651-2009
+    "Widerstandsthermometer, Thermische Widerstandssensoren und Widerstands-
+     Thermoelemente. Allgemeine Technische Anforderungen und Prüfverfahren"
+    Zwischenstaatlicher Rat für Standardisierung, Metrologie und
+    Zertifizierung, 2009
+
+[3] ASTM E1137/E1137M-20
+    "Standardspezifikation für Industrielle Platin-Widerstandsthermometer"
+    ASTM International, 2020
+
+[4] DIN EN 60751:2009-05
+    "Industrielle Platin-Widerstandsthermometer und Platin-Temperatursensoren
+     (IEC 60751:2008)"
+    Deutsches Institut für Normung, 2009
+
+[5] H.D. Burns und M. Scroger
+    "Die Callendar-Van Dusen Gleichung und ihre Anwendung"
+    NIST Technical Note, 1988
+
+[6] Nicholas, J.V., White, D.R.
+    "Rückverfolgbare Temperaturen: Eine Einführung in Temperaturmessung und
+     -kalibrierung"
+    John Wiley & Sons, 2001
+
+
+================================================================================
+ANHANG A: SCHNELLREFERENZFORMELN
+================================================================================
+
+Pt100 bei Temperatur T (Pt385):
+  0°C:  R = 100.00 Ohm
+  Temperatur zu Widerstand: R = 100(1 + 0.0039083T - 0.0000005775T^2)
+
+Cu100 bei Temperatur T (Cu427):
+  0°C:  R = 100.00 Ohm
+  Temperatur zu Widerstand: R = 100(1 + 0.00427T)
+
+Ni100 bei Temperatur T (Ni617):
+  0°C:  R = 100.00 Ohm
+  Temperatur zu Widerstand: R = 100(1 + 0.00617T)
+
+
+================================================================================
+
+
+
+================================================================================
+TEIL II: THERMOELEMENTE
+================================================================================
+
+10. THERMOELEMENTE - ALLGEMEINE ÜBERSICHT
+-------------------------------------
+
+10.1 WAS SIND THERMOELEMENTE?
+-------------------------------
+Ein Thermoelement ist ein Temperatursensor, der eine elektrische Spannung
+(thermoelektrische elektromotorische Kraft) erzeugt, die proportional zur
+Temperaturdifferenz zwischen zwei Verbindungsstellen verschiedener Metalle ist.
+Es basiert auf dem Seebeck-Effekt, entdeckt 1821 von Thomas Johann Seebeck.
+
+Funktionsprinzip:
+- Zwei Drähte aus unterschiedlichen Metallen sind an einem Ende verbunden (Messstelle)
+- Das andere Ende befindet sich bei einer Referenztemperatur (Vergleichsstelle)
+- Die Temperaturdifferenz erzeugt eine kleine Spannung (µV-mV)
+- Die Spannung ist direkt proportional zur gemessenen Temperatur
+
+
+10.2 RTD vs THERMOELEMENT VERGLEICH
+-------------------------------------
+
+┌────────────────────────┬─────────────────────────┬─────────────────────────┐
+│ Merkmal                │ RTD                     │ Thermoelement           │
+├────────────────────────┼─────────────────────────┼─────────────────────────┤
+│ Prinzip                │ Elektrischer Widerstand │ Thermoelektr. Spannung  │
+│ Ausgangssignal         │ Ohm (Ω)                 │ Millivolt (mV)          │
+│ Temperaturbereich      │ -200°C bis +850°C       │ -270°C bis +1820°C      │
+│ Genauigkeit            │ ±0.1°C bis ±0.001°C     │ ±0.5°C bis ±2°C         │
+│ Ansprechzeit           │ Langsam (Sekunden)      │ Schnell (Millisekunden) │
+│ Stabilität             │ Ausgezeichnet           │ Gut (Drift über Zeit)   │
+│ Kosten                 │ Höher                   │ Niedriger               │
+│ Stromversorgung        │ Erforderlich (Strom)    │ Selbsterzeugend         │
+│ Größe                  │ Größer                  │ Sehr klein (Punkt)      │
+│ Linearität             │ Gut                     │ Nicht-linear            │
+└────────────────────────┴─────────────────────────┴─────────────────────────┘
+
+
+11. THERMOELEMENT-TYPEN UND SPEZIFIKATIONEN
+-----------------------------------------
+
+11.1 TYP K (CHROMEL-ALUMEL)
+----------------------------
+Der gebräuchlichste Thermoelement-Typ für allgemeine und industrielle Anwendungen.
+
+Materialien:
+  Positiv (+): Chromel (90% Nickel, 10% Chrom)
+  Negativ (-): Alumel (95% Nickel, 2% Mangan, 2% Aluminium, 1% Silizium)
+
+Spezifikationen:
+  Temperaturbereich: -270°C bis +1372°C
+  Empfindlichkeit bei 0°C: ~41 µV/°C
+  Farbcode: Gelb
+  Standard: IEC 60584, ASTM E230
+
+Anwendungen:
+  - Allgemeine industrielle Zwecke
+  - HVAC-Systeme
+  - Prozesssteuerung
+  - Öfen und Kessel
+
+Vorteile:
+  + Breiter Temperaturbereich
+  + Niedrige Kosten
+  + Gute Oxidationsbeständigkeit
+  + Weit verbreitet
+
+Nachteile:
+  - Magnetische Drift über 800°C
+  - Nicht geeignet für reduzierende Atmosphären
+  - Mäßige Genauigkeit
+
+
+11.2 TYP J (EISEN-KONSTANTAN)
+------------------------------
+Thermoelement für Eisen-/Stahlindustrie und reduzierende Atmosphären.
+
+Materialien:
+  Positiv (+): Eisen (Fe)
+  Negativ (-): Konstantan (55% Kupfer, 45% Nickel)
+
+Spezifikationen:
+  Temperaturbereich: -210°C bis +1200°C
+  Empfindlichkeit bei 0°C: ~52 µV/°C (höchste)
+  Farbcode: Schwarz
+  Standard: IEC 60584, ASTM E230
+
+Anwendungen:
+  - Eisen- und Stahlindustrie
+  - Reduzierende Atmosphären
+  - Budgetbeschränkte Anwendungen
+  - Altgeräte
+
+Vorteile:
+  + Hohe Empfindlichkeit
+  + Sehr niedrige Kosten
+  + Gut für mittlere Temperaturen
+
+Nachteile:
+  - Schnelle Oxidation über 540°C
+  - Nicht für oxidierende Atmosphären
+  - Begrenzter Bereich als Typ K
+
+
+11.3 TYP T (KUPFER-KONSTANTAN)
+-------------------------------
+Thermoelement für Kryotechnik und Laboranwendungen.
+
+Materialien:
+  Positiv (+): Kupfer (Cu)
+  Negativ (-): Konstantan (55% Kupfer, 45% Nickel)
+
+Spezifikationen:
+  Temperaturbereich: -270°C bis +400°C
+  Empfindlichkeit bei 0°C: ~41 µV/°C
+  Farbcode: Blau
+  Standard: IEC 60584, ASTM E230
+
+Anwendungen:
+  - Kryotechnik und niedrige Temperaturen
+  - Lebensmittelindustrie
+  - Labor und Forschung
+  - Korrosive Umgebungen
+
+Vorteile:
+  + Ausgezeichnet für niedrige Temperaturen
+  + Sehr gute Linearität
+  + Feuchtigkeitsbeständig
+  + Gute Genauigkeit
+
+Nachteile:
+  - Begrenzter Bereich (max 400°C)
+  - Kupfer oxidiert über 400°C
+
+
+11.4 TYP E (CHROMEL-KONSTANTAN)
+--------------------------------
+Thermoelement mit der höchsten Empfindlichkeit (maximale Ausgabe).
+
+Materialien:
+  Positiv (+): Chromel (90% Nickel, 10% Chrom)
+  Negativ (-): Konstantan (55% Kupfer, 45% Nickel)
+
+Spezifikationen:
+  Temperaturbereich: -270°C bis +1000°C
+  Empfindlichkeit bei 0°C: ~61 µV/°C (maximal!)
+  Farbcode: Violett
+  Standard: IEC 60584, ASTM E230
+
+Anwendungen:
+  - Kryotechnik
+  - Energieerzeugung
+  - Präzise Erkennung kleiner Änderungen
+
+Vorteile:
+  + Maximale Empfindlichkeit (großes Signal)
+  + Ausgezeichnetes Signal-Rausch-Verhältnis
+  + Gute Korrosionsbeständigkeit
+
+Nachteile:
+  - Höhere Kosten
+  - Weniger häufig verwendet (begrenzte Verfügbarkeit)
+
+
+11.5 TYP N (NICROSIL-NISIL)
+----------------------------
+Modernes Thermoelement mit verbesserter Stabilität bei hohen Temperaturen.
+
+Materialien:
+  Positiv (+): Nicrosil (84.4% Ni, 14.2% Cr, 1.4% Si)
+  Negativ (-): Nisil (95.5% Ni, 4.4% Si, 0.1% Mg)
+
+Spezifikationen:
+  Temperaturbereich: -270°C bis +1300°C
+  Empfindlichkeit bei 0°C: ~27 µV/°C
+  Farbcode: Orange
+  Standard: IEC 60584
+
+Anwendungen:
+  - Typ K Ersatz (bessere Stabilität)
+  - Hohe Temperaturen
+  - Oxidierende Atmosphären
+
+Vorteile:
+  + Überlegene Stabilität gegenüber Typ K
+  + Keine magnetische Drift
+  + Ausgezeichnete Oxidationsbeständigkeit
+
+Nachteile:
+  - Höhere Kosten als Typ K
+  - Geringere Empfindlichkeit
+
+
+11.6 TYP S, R, B (EDELMETALLE - PLATIN)
+----------------------------------------
+Platin-Thermoelemente für sehr hohe Temperaturen und maximale Präzision.
+
+TYP S: Platin-Platin/Rhodium 10%
+  Bereich: -50°C bis +1768°C
+  Empfindlichkeit: ~6 µV/°C
+  Anwendungen: Pharmazeutisch, Biotech, Laborstandards
+
+TYP R: Platin-Platin/Rhodium 13%
+  Bereich: -50°C bis +1768°C
+  Empfindlichkeit: ~6 µV/°C
+  Anwendungen: Kalibrierstandards, sehr hohe Temperaturen
+
+TYP B: Platin/Rhodium 30%-Platin/Rhodium 6%
+  Bereich: +200°C bis +1820°C
+  Empfindlichkeit: ~1 µV/°C (sehr niedrig!)
+  Anwendungen: Glasherstellung, sehr heiße Öfen
+
+Vorteile:
+  + Maximale Genauigkeit
+  + Ausgezeichnete Stabilität
+  + Extreme Temperaturen
+
+Nachteile:
+  - Extrem hohe Kosten
+  - Sehr geringe Empfindlichkeit (Rauschen)
+  - Zerbrechlich (erfordert Schutz)
+
+
+12. THERMOELEMENT-BERECHNUNGEN UND GLEICHUNGEN
+--------------------------------------------
+
+12.1 NIST ITS-90 POLYNOME
+--------------------------
+Der NIST-Standard (National Institute of Standards and Technology) definiert
+hochpräzise Polynome für Temperatur ↔ Spannungsumwandlung.
+
+Allgemeine Form für TEMPERATUR → SPANNUNG:
+
+  V(T) = c₀ + c₁·T + c₂·T² + c₃·T³ + ... + cₙ·Tⁿ
+
+Wobei:
+  V = Spannung in Millivolt (mV)
+  T = Temperatur in Grad Celsius (°C)
+  c₀, c₁, ..., cₙ = Typspezifische Polynomkoeffizienten
+
+Für Typ K (0°C bis 1372°C):
+  V(T) = c₀ + c₁·T + c₂·T² + ... + c₉·T⁹ + a₀·exp[a₁(T-a₂)²]
+
+  Koeffizienten (erste 5):
+    c₀ = -0.176004136860 x 10⁻¹
+    c₁ =  0.389212049750 x 10⁻¹
+    c₂ =  0.185587700320 x 10⁻⁴
+    c₃ = -0.994575928740 x 10⁻⁷
+    c₄ =  0.318409457190 x 10⁻⁹
+    ...plus Exponentialterm
+
+
+12.2 VERGLEICHSSTELLENKOMPENSATION
+------------------------------------
+Thermoelemente messen die Temperaturdifferenz zwischen zwei Verbindungsstellen.
+Um die absolute Temperatur zu erhalten, muss die Vergleichsstellentemperatur
+kompensiert werden (Cold Junction Compensation - CJC).
+
+Gemessene Temperatur = Berechnete Temperatur aus V + Vergleichsstellentemperatur
+
+CJC-Methoden:
+1. Eisbad bei 0°C (Labor)
+2. RTD/Thermistor-Sensor an Verbindungsstelle (industriell)
+3. Elektronische Kompensation (spezialisierte Schaltungen)
+
+In RTD Master Pro:
+- Benutzer kann Vergleichsstellentemperatur manuell einstellen
+- Standardwert: 25°C (Raumtemperatur)
+- Automatische Berechnung mit Kompensation
+
+
+12.3 UMKEHRBERECHNUNG (SPANNUNG → TEMPERATUR)
+----------------------------------------------
+Für die Umkehrumwandlung wird die Newton-Raphson-Methode verwendet,
+um die Polynomgleichung iterativ zu lösen.
+
+Algorithmus:
+1. CJC-Kompensation: V_kompensiert = V_gemessen + V(T_Vergleichsstelle)
+2. Anfangsschätzung: T₀ = 0°C
+3. Newton-Raphson-Iteration:
+   T_(n+1) = T_n - [V(T_n) - V_kompensiert] / [dV/dT(T_n)]
+4. Wiederholen bis Konvergenz (|T_(n+1) - T_n| < Toleranz)
+
+
+13. VERWENDUNG VON THERMOELEMENTEN IN RTD MASTER PRO
+-------------------------------------------
+
+13.1 THERMOELEMENT-MODUS AUSWÄHLEN
+------------------------------------
+1. RTD Master Pro öffnen
+2. Im Abschnitt "Measurement Mode" "Thermocouple" auswählen
+3. Die Benutzeroberfläche wechselt zur Anzeige thermoelement-spezifischer Steuerelemente
+
+13.2 THERMOELEMENT-KONFIGURATION
+----------------------------------
+1. Type: Thermoelement-Typ auswählen (K, J, T, E, N, S, R, B)
+2. Range: Automatisch für ausgewählten Typ angezeigt
+3. Sensitivity: Automatisch angezeigt (µV/°C)
+4. Cold Junction Temp: Vergleichsstellentemperatur einstellen (Standard 25°C)
+
+13.3 UNTERSTÜTZTE UMWANDLUNGEN
+-------------------------------
+
+MODUS 1: TEMPERATUR → SPANNUNG
+  Eingabe: Temperatur in °C
+  Ausgabe: Spannung in mV
+  Beispiel Typ K:
+    500°C → 20.644 mV
+
+MODUS 2: SPANNUNG → TEMPERATUR
+  Eingabe: Spannung in mV
+  Ausgabe: Temperatur in °C (mit CJC-Kompensation)
+  Beispiel Typ K:
+    20.644 mV (CJC=25°C) → ~500°C
+
+13.4 PRAKTISCHE BEISPIELE
+--------------------------
+
+Beispiel 1: Ofentemperaturmessung mit Typ K
+  - Gemessene Spannung: 35.2 mV
+  - Vergleichsstelle: 23°C
+  - Auswählen: Typ K, Voltage → Temperature
+  - Eingabe: 35.2 mV, CJC: 23°C
+  - Ausgabe: ~852°C
+
+Beispiel 2: Erwartete Spannung berechnen Typ J
+  - Ofentemperatur: 600°C
+  - Auswählen: Typ J, Temperature → Voltage
+  - Eingabe: 600°C
+  - Ausgabe: ~33.277 mV
+
+
+================================================================================
+ANHANG B: THERMOELEMENT-SCHNELLREFERENZFORMELN
+================================================================================
+
+TYP K (0°C bis 500°C - vereinfachte Annäherung):
+  V(T) ≈ 0.04 mV/°C × T
+  Beispiel: 100°C → ~4.0 mV
+
+TYP J (0°C bis 500°C):
+  V(T) ≈ 0.05 mV/°C × T
+  Beispiel: 100°C → ~5.0 mV
+
+TYP T (0°C bis 200°C):
+  V(T) ≈ 0.04 mV/°C × T
+  Beispiel: 100°C → ~4.0 mV
+
+Hinweis: Dies sind lineare Näherungen. Für maximale Genauigkeit
+         verwendet die Anwendung vollständige NIST ITS-90 Polynome.
+
+
+================================================================================
+ZUSÄTZLICHE THERMOELEMENT-REFERENZEN
+================================================================================
+
+[7] IEC 60584-1:2013
+    "Thermoelemente - Teil 1: EMF-Spezifikationen und Toleranzen"
+    Internationale Elektrotechnische Kommission, 2013
+
+[8] ASTM E230/E230M-17
+    "Standardspezifikation und Temperatur-Elektromotorische Kraft (EMF)
+     Tabellen für standardisierte Thermoelemente"
+    ASTM International, 2017
+
+[9] NIST ITS-90 Thermocouple Database
+    https://srdata.nist.gov/its90/main/
+    National Institute of Standards and Technology
+
+[10] Handbuch zur Verwendung von Thermoelementen in der Temperaturmessung
+     ASTM Manual Series MNL 12, Vierte Ausgabe, 1993
+
+================================================================================
+ENDE DER TECHNISCHEN DOKUMENTATION
+================================================================================

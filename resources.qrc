@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon.png</file>
+        <file>icon.svg</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="rtdmaster_ro.qm">translations/rtdmaster_ro.qm</file>
+        <file alias="rtdmaster_de.qm">translations/rtdmaster_de.qm</file>
+        <file alias="rtdmaster_fr.qm">translations/rtdmaster_fr.qm</file>
+        <file alias="rtdmaster_es.qm">translations/rtdmaster_es.qm</file>
+        <file alias="rtdmaster_ru.qm">translations/rtdmaster_ru.qm</file>
+    </qresource>
+</RCC>

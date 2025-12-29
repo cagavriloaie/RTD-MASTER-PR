@@ -1,0 +1,858 @@
+================================================================================
+RTD MASTER PRO - DOCUMENTAȚIE TEHNICĂ
+================================================================================
+
+VERSIUNE DOCUMENT: 1.2
+ULTIMA ACTUALIZARE: Decembrie 2025
+
+================================================================================
+CUPRINS
+================================================================================
+PARTEA I: RTD (RESISTANCE TEMPERATURE DETECTORS)
+1. PREZENTARE GENERALĂ
+2. STANDARDE INTERNAȚIONALE
+3. MATERIALE RTD ȘI SPECIFICAȚII
+4. METODE DE CALCUL ȘI ECUAȚII
+5. SPECIFICAȚII DE TOLERANȚĂ
+6. DOMENII DE TEMPERATURĂ
+7. FUNCȚIONALITĂȚI PROGRAM
+8. IMPLEMENTARE TEHNICĂ
+9. REFERINȚE
+
+================================================================================
+PARTEA II: TERMOCUPLE (THERMOCOUPLES)
+10. TERMOCUPLE - PREZENTARE GENERALĂ
+11. TIPURI DE TERMOCUPLE ȘI SPECIFICAȚII
+12. CALCULE TERMOCUPLE ȘI ECUAȚII
+13. UTILIZARE TERMOCUPLE ÎN RTD MASTER PRO
+
+
+================================================================================
+PARTEA I: RTD (RESISTANCE TEMPERATURE DETECTORS)
+================================================================================
+
+1. PREZENTARE GENERALĂ
+================================================================================
+
+RTD Master Pro este o aplicație desktop profesională proiectată pentru conversii
+precise de temperatură folosind atât senzori RTD (Resistance Temperature
+Detector) cât și termocuple, conform mai multor standarde internaționale.
+
+SENZORI RTD:
+Dispozitive de măsurare precisă a temperaturii care exploatează schimbarea
+previzibilă a rezistenței electrice a metalelor pure cu temperatura.
+
+TERMOCUPLE:
+Senzori de temperatură care generează tensiune electrică bazată pe efectul
+Seebeck, ideali pentru temperaturi extreme și răspuns rapid.
+
+Aplicația implementează ecuațiile și coeficienții standardizați definiți de
+organizațiile internaționale de metrologie (IEC, NIST, ASTM, GOST).
+
+
+================================================================================
+2. STANDARDE INTERNAȚIONALE
+================================================================================
+
+2.1 IEC 60751:2008
+-------------------
+Titlu: "Termometre cu rezistență din platină industriale și senzori de
+       temperatură din platină"
+Organizație: Comisia Electrotehnică Internațională
+Domeniu: Specifică cerințele și toleranțele pentru RTD-uri din platină industriale
+Domeniu de Temperatură (Platină): -200°C până la +850°C
+Coeficient Principal: alpha = 0.00385 Ohm/Ohm/°C (Pt385)
+Clase de Toleranță: AA, A, B (fost 1/10 DIN, 1/3 DIN, DIN)
+
+Valori Standard: Pt100, Pt500, Pt1000
+Coeficienți Callendar-Van Dusen pentru Pt385:
+  A = 3.9083 x 10^-3  °C^-1
+  B = -5.775 x 10^-7  °C^-2
+  C = -4.183 x 10^-12 °C^-4 (doar pentru T < 0°C)
+
+
+2.2 GOST 6651-2009
+-------------------
+Titlu: "Termometre cu Rezistență, Senzori de Rezistență Termică și
+       Termocupluri cu Rezistență"
+Organizație: Consiliul Interstate pentru Standardizare (țările CSI)
+Domeniu: Standard rusesc/sovietic pentru specificații RTD
+Domeniu de Temperatură (Platină): -200°C până la +600°C
+Coeficient Principal: alpha = 0.00391 Ohm/Ohm/°C (Pt391)
+
+Coeficienți Callendar-Van Dusen pentru Pt391:
+  A =  3.96847 x 10^-3  °C^-1
+  B = -5.847   x 10^-7  °C^-2
+  C = -4.35    x 10^-12 °C^-4 (doar pentru T < 0°C)
+
+Notă: Specifică și RTD-uri din cupru (Cu426) și nichel
+
+
+2.3 ASTM E1137/E1137M-20
+-------------------------
+Titlu: "Specificație Standard pentru Termometre cu Rezistență din Platină
+       Industriale"
+Organizație: Societatea Americană pentru Testare și Materiale
+Domeniu: Standard nord-american pentru RTD-uri din platină industriale
+Domeniu de Temperatură: -200°C până la +850°C
+Coeficient: alpha = 0.00385 Ohm/Ohm/°C (același ca IEC 60751)
+
+Notă: ASTM E1137 se aliniază cu IEC 60751 pentru compatibilitate internațională
+Grade de Toleranță: Grad A, Grad B (echivalent cu Clasele IEC)
+
+
+2.4 Standard Legacy US
+-----------------------
+Standard american istoric (pre-aliniere ASTM)
+Coeficient: alpha = 0.00392 Ohm/Ohm/°C (Pt392)
+Domeniu de Temperatură: -200°C până la +850°C
+
+Coeficienți Callendar-Van Dusen pentru Pt392:
+  A =  3.9848 x 10^-3  °C^-1
+  B = -5.870  x 10^-7  °C^-2
+  C = -4.40   x 10^-12 °C^-4 (doar pentru T < 0°C)
+
+
+================================================================================
+3. MATERIALE RTD ȘI SPECIFICAȚII
+================================================================================
+
+3.1 RTD-URI DIN PLATINĂ
+------------------------
+Cel mai comun și stabil material RTD. Linearitate și stabilitate excelente.
+
+Configurații Standard:
++------------+---------------+-----------------------------------------------+
+|  Tip       |  R0 (0°C)     |  Aplicații Comune                             |
++------------+---------------+-----------------------------------------------+
+|  Pt100     |  100 Ohm      |  Industrial, HVAC, control proces             |
+|  Pt500     |  500 Ohm      |  Laborator, măsurători de înaltă precizie     |
+|  Pt1000    |  1000 Ohm     |  Automotive, automatizare clădiri             |
++------------+---------------+-----------------------------------------------+
+
+Coeficienți de Temperatură:
+  alpha_385 = 0.00385 Ohm/Ohm/°C  (IEC 60751, ASTM E1137, DIN 43760)
+  alpha_391 = 0.00391 Ohm/Ohm/°C  (GOST 6651)
+  alpha_392 = 0.00392 Ohm/Ohm/°C  (Legacy US)
+
+Domeniu Tipic de Temperatură: -200°C până la +850°C (unele până la +1000°C)
+
+
+3.2 RTD-URI DIN CUPRU
+----------------------
+Cost redus, linearitate bună, domeniu limitat de temperatură.
+
+Configurații Standard:
++------------+---------------+-----------------------------------------------+
+|  Tip       |  R0 (0°C)     |  Aplicații Comune                             |
++------------+---------------+-----------------------------------------------+
+|  Cu50      |  50 Ohm       |  Monitorizare temperatură înfășurări          |
+|  Cu100     |  100 Ohm      |  Monitorizare motoare și transformatoare      |
++------------+---------------+-----------------------------------------------+
+
+Coeficienți de Temperatură:
+  alpha_426 = 0.00426 Ohm/Ohm/°C  (GOST 6651)
+  alpha_427 = 0.00427 Ohm/Ohm/°C  (IEC 60751)
+  alpha_428 = 0.00428 Ohm/Ohm/°C  (Unii producători)
+
+Domeniu de Temperatură: -50°C până la +150°C (oxidare peste 150°C)
+
+
+3.3 RTD-URI DIN NICHEL
+-----------------------
+Sensibilitate ridicată, non-linear, domeniu moderat de temperatură.
+
+Configurații Standard:
++------------+---------------+----------------+----------------------------------+
+|  Tip       |  R0 (0°C)     |  Valoare alpha |  Aplicații Comune                |
++------------+---------------+----------------+----------------------------------+
+|  Ni100     |  100 Ohm      |  0.00617       |  HVAC, uz general                |
+|  Ni120     |  120 Ohm      |  0.00672       |  Aplicații HVAC europene         |
+|  Ni1000    |  1000 Ohm     |  0.00618       |  Automotive, electrocasnice      |
++------------+---------------+----------------+----------------------------------+
+
+Domeniu de Temperatură: -60°C până la +180°C (aplicații standard)
+
+
+================================================================================
+4. METODE DE CALCUL ȘI ECUAȚII
+================================================================================
+
+4.1 CALCUL RTD PLATINĂ - Ecuația Callendar-Van Dusen
+------------------------------------------------------
+
+Ecuația Callendar-Van Dusen este metoda acceptată internațional pentru
+calcularea rezistenței RTD din platină în funcție de temperatură.
+
+Pentru T >= 0°C:
+  R(T) = R0(1 + AT + BT^2)
+
+Pentru T < 0°C:
+  R(T) = R0[1 + AT + BT^2 + C(T - 100)T^3]
+
+Unde:
+  R(T) = Rezistența la temperatura T (în Ohm)
+  R0   = Rezistența nominală la 0°C (în Ohm)
+  T    = Temperatura (în °C)
+  A, B, C = Coeficienții Callendar-Van Dusen
+
+VALORI COEFICIENȚI:
+
+Pt385 (IEC 60751, ASTM E1137):
+  A =  3.9083  x 10^-3  °C^-1
+  B = -5.775   x 10^-7  °C^-2
+  C = -4.183   x 10^-12 °C^-4
+
+Pt391 (GOST 6651):
+  A =  3.96847 x 10^-3  °C^-1
+  B = -5.847   x 10^-7  °C^-2
+  C = -4.35    x 10^-12 °C^-4
+
+Pt392 (Legacy US):
+  A =  3.9848  x 10^-3  °C^-1
+  B = -5.870   x 10^-7  °C^-2
+  C = -4.40    x 10^-12 °C^-4
+
+
+CALCUL INVERS (Rezistență -> Temperatură):
+
+Pentru R >= R0 (T >= 0°C):
+  Rezolvă ecuația de gradul doi: BT^2 + AT + (1 - R/R0) = 0
+
+  T = (-A + sqrt(A^2 - 4B(1 - R/R0))) / (2B)
+
+Pentru R < R0 (T < 0°C):
+  Rezolvă ecuația cubică iterativ folosind metode numerice (Newton-Raphson)
+
+
+4.2 CALCUL RTD CUPRU ȘI NICHEL - Aproximare Liniară
+-----------------------------------------------------
+
+RTD-urile din cupru și nichel folosesc o relație liniară simplificată datorită
+domeniilor lor mai înguste de temperatură și proprietăților fizice diferite.
+
+Calcul Direct (Temperatură -> Rezistență):
+  R(T) = R0(1 + alpha*T)
+
+Calcul Invers (Rezistență -> Temperatură):
+  T = (R - R0) / (R0 x alpha)
+
+Unde:
+  R(T) = Rezistența la temperatura T (în Ohm)
+  R0   = Rezistența nominală la 0°C (în Ohm)
+  alpha = Coeficientul de temperatură al rezistenței (în Ohm/Ohm/°C)
+  T    = Temperatura (în °C)
+
+
+COEFICIENȚI CUPRU:
+  alpha_426 = 0.00426 Ohm/Ohm/°C
+  alpha_427 = 0.00427 Ohm/Ohm/°C
+  alpha_428 = 0.00428 Ohm/Ohm/°C
+
+COEFICIENȚI NICHEL:
+  alpha_617 = 0.00617 Ohm/Ohm/°C (Ni100)
+  alpha_618 = 0.00618 Ohm/Ohm/°C (Ni1000)
+  alpha_672 = 0.00672 Ohm/Ohm/°C (Ni120)
+
+
+================================================================================
+5. SPECIFICAȚII DE TOLERANȚĂ
+================================================================================
+
+5.1 CLASE DE TOLERANȚĂ IEC 60751 (RTD-uri din Platină)
+--------------------------------------------------------
+
+Clasa AA (Precizie Maximă):
+  Toleranță = ±(0.1 + 0.0017|t|) °C
+
+  Exemple:
+    La   0°C: ±0.10°C
+    La  50°C: ±0.185°C
+    La 100°C: ±0.27°C
+    La 200°C: ±0.44°C
+
+Clasa A (Precizie Standard):
+  Toleranță = ±(0.15 + 0.002|t|) °C
+
+  Exemple:
+    La   0°C: ±0.15°C
+    La  50°C: ±0.25°C
+    La 100°C: ±0.35°C
+    La 200°C: ±0.55°C
+
+Clasa B (Uz General):
+  Toleranță = ±(0.3 + 0.005|t|) °C
+
+  Exemple:
+    La   0°C: ±0.30°C
+    La  50°C: ±0.55°C
+    La 100°C: ±0.80°C
+    La 200°C: ±1.30°C
+
+Clasa C (Precizie Redusă):
+  Toleranță = ±(0.6 + 0.01|t|) °C
+
+  Exemple:
+    La   0°C: ±0.60°C
+    La  50°C: ±1.10°C
+    La 100°C: ±1.60°C
+    La 200°C: ±2.60°C
+
+Unde |t| este valoarea absolută a temperaturii în °C
+
+
+5.2 TOLERANȚĂ REZISTENȚĂ LA 0°C
+---------------------------------
+
+Pentru senzori Pt100:
+  Clasa AA: ±0.04 Ohm la 0°C
+  Clasa A:  ±0.06 Ohm la 0°C
+  Clasa B:  ±0.12 Ohm la 0°C
+  Clasa C:  ±0.24 Ohm la 0°C
+
+
+================================================================================
+6. DOMENII DE TEMPERATURĂ
+================================================================================
+
+6.1 DOMENII DE TEMPERATURĂ PE STANDARD ȘI MATERIAL
+----------------------------------------------------
+
++---------------------+------------------+------------------+------------------+
+|  Standard           |  Platină         |  Cupru           |  Nichel          |
++---------------------+------------------+------------------+------------------+
+|  IEC 60751          | -200 până 850°C  | -50 până 150°C   | -60 până 180°C   |
+|  GOST 6651          | -200 până 600°C  | -50 până 150°C   | -60 până 180°C   |
+|  ASTM E1137         | -200 până 850°C  | -50 până 150°C   | -60 până 180°C   |
+|  Legacy US          | -200 până 850°C  | -50 până 150°C   | -60 până 180°C   |
++---------------------+------------------+------------------+------------------+
+
+Notă: Senzori din platină cu domeniu extins pot atinge -270°C până la +1000°C
+      cu specificații de toleranță modificate.
+
+
+6.2 DOMENII DE REZISTENȚĂ PENTRU Pt100
+----------------------------------------
+
+La temperaturi minime și maxime (folosind coeficientul Pt385):
+
+Temperatură    Rezistență (Pt100)
+-200°C         18.52 Ohm
+-100°C         60.26 Ohm
+   0°C        100.00 Ohm
+ 100°C        138.51 Ohm
+ 200°C        175.86 Ohm
+ 400°C        247.09 Ohm
+ 600°C        316.16 Ohm
+ 850°C        390.48 Ohm
+
+
+================================================================================
+7. FUNCȚIONALITĂȚI PROGRAM
+================================================================================
+
+7.1 CAPABILITĂȚI DE BAZĂ
+--------------------------
+- Conversie bidirecțională (Temperatură <-> Rezistență)
+- Suport pentru 4 standarde internaționale
+- 3 tipuri de materiale RTD (Platină, Cupru, Nichel)
+- Coeficienți alpha multipli per material
+- 4 clase de toleranță (AA, A, B, C)
+- Calcul toleranță în timp real
+- Ajustare dinamică domeniu bazată pe standard și selecție material
+
+
+7.2 INTERFAȚĂ UTILIZATOR
+--------------------------
+- Design modern profesional cu secțiuni codificate color
+- Fonturi mari lizibile (11-14pt)
+- Selectoare dropdown intuitive
+- Câmpuri de input/output clare cu unități
+- Afișare toleranță evidențiată
+- Panou de informații arătând configurația curentă
+- Layout responsive
+- Suport multi-limbaj (Engleză, Română, Germană)
+
+
+7.3 CONFIGURAȚII SUPORTATE
+----------------------------
+
+RTD-uri din Platină:
+  - Pt100, Pt500, Pt1000
+  - Coeficienți: 0.00385, 0.00391, 0.00392
+
+RTD-uri din Cupru:
+  - Cu50, Cu100
+  - Coeficienți: 0.00426, 0.00427, 0.00428
+
+RTD-uri din Nichel:
+  - Ni100, Ni120, Ni1000
+  - Coeficienți: 0.00617, 0.00618, 0.00672
+
+
+================================================================================
+8. IMPLEMENTARE TEHNICĂ
+================================================================================
+
+8.1 ARHITECTURĂ SOFTWARE
+-------------------------
+Limbaj: C++17
+Framework GUI: Qt 5.x / 6.x
+Sistem Build: qmake
+Suport Platform: Windows, Linux, macOS
+
+Componente:
+  - rtdcalculator.cpp/h: Motor de calcul de bază
+  - mainwindow.cpp/h: Logică GUI și gestionare evenimente
+  - mainwindow.ui: Definiție interfață Qt Designer
+  - main.cpp: Punct de intrare aplicație
+
+
+8.2 PRECIZIE CALCUL
+--------------------
+- Aritmetică virgulă mobilă dublu-precizie (IEEE 754)
+- Precizie numerică: ~15-17 cifre semnificative zecimale
+- Rezolvitor iterativ pentru Callendar-Van Dusen invers (T < 0°C)
+- Toleranță de convergență: 1 x 10^-6 °C
+
+
+8.3 VALIDARE INPUT
+-------------------
+- Aplicare domeniu temperatură bazată pe standardul selectat
+- Auto-calcul domeniu rezistență bazat pe R0 și coeficienți
+- Prevenire calcule în afara domeniului
+- Actualizări automate de domeniu la schimbări de configurație
+
+
+================================================================================
+9. REFERINȚE
+================================================================================
+
+[1] IEC 60751:2008
+    "Termometre cu rezistență din platină industriale și senzori de
+     temperatură din platină"
+    Comisia Electrotehnică Internațională, 2008
+
+[2] GOST 6651-2009
+    "Termometre cu Rezistență, Senzori de Rezistență Termică și Termocupluri
+     cu Rezistență. Cerințe Tehnice Generale și Metode de Test"
+    Consiliul Interstate pentru Standardizare, Metrologie și Certificare, 2009
+
+[3] ASTM E1137/E1137M-20
+    "Specificație Standard pentru Termometre cu Rezistență din Platină
+     Industriale"
+    ASTM International, 2020
+
+[4] DIN EN 60751:2009-05
+    "Termometre cu rezistență din platină industriale și senzori de
+     temperatură din platină (IEC 60751:2008)"
+    Institutul German pentru Standardizare, 2009
+
+[5] H.D. Burns și M. Scroger
+    "Ecuația Callendar-Van Dusen și Aplicarea Sa"
+    Notă Tehnică NIST, 1988
+
+[6] Nicholas, J.V., White, D.R.
+    "Temperature Trasbile: O Introducere în Măsurarea și Calibrarea
+     Temperaturii"
+    John Wiley & Sons, 2001
+
+
+================================================================================
+ANEXA A: FORMULE DE REFERINȚĂ RAPIDĂ
+================================================================================
+
+Pt100 la Temperatura T (Pt385):
+  0°C:  R = 100.00 Ohm
+  Temperatură către Rezistență: R = 100(1 + 0.0039083T - 0.0000005775T^2)
+
+Cu100 la Temperatura T (Cu427):
+  0°C:  R = 100.00 Ohm
+  Temperatură către Rezistență: R = 100(1 + 0.00427T)
+
+Ni100 la Temperatura T (Ni617):
+  0°C:  R = 100.00 Ohm
+  Temperatură către Rezistență: R = 100(1 + 0.00617T)
+
+
+================================================================================
+
+
+
+================================================================================
+PARTEA II: TERMOCUPLE (THERMOCOUPLES)
+================================================================================
+
+10. TERMOCUPLE - PREZENTARE GENERALĂ
+------------------------------------
+
+10.1 CE SUNT TERMOCUPLELE?
+---------------------------
+Termocupla este un senzor de temperatură care generează o tensiune electrică
+(forță electromotoare termoelectrică) proporțională cu diferența de temperatură
+între două joncțiuni de metale diferite. Se bazează pe efectul Seebeck,
+descoperit în 1821 de Thomas Johann Seebeck.
+
+Principiu de funcționare:
+- Două fire din metale diferite sunt unite la un capăt (joncțiunea măsurare)
+- Celălalt capăt este la o temperatură de referință (joncțiunea rece)
+- Diferența de temperatură generează o tensiune mică (µV-mV)
+- Tensiunea este direct proportională cu temperatura măsurată
+
+
+10.2 COMPARAȚIE RTD vs TERMOCUPLA
+-----------------------------------
+
+┌────────────────────────┬─────────────────────────┬─────────────────────────┐
+│ Caracteristică         │ RTD                     │ Termocupla              │
+├────────────────────────┼─────────────────────────┼─────────────────────────┤
+│ Principiu              │ Rezistență electrică    │ Tensiune termoelectrică │
+│ Semnal output          │ Ohm (Ω)                 │ Milivolt (mV)           │
+│ Domeniu temperatură    │ -200°C to +850°C        │ -270°C to +1820°C       │
+│ Precizie               │ ±0.1°C to ±0.001°C      │ ±0.5°C to ±2°C          │
+│ Răspuns               │ Lent (secunde)          │ Rapid (milisecunde)     │
+│ Stabilitate            │ Excelentă               │ Bună (deriva în timp)   │
+│ Cost                   │ Mai mare                │ Mai mic                 │
+│ Alimentare             │ Necesară (curent)       │ Auto-generare           │
+│ Dimensiune             │ Mai mare                │ Foarte mic (punct)      │
+│ Linearitate            │ Bună                    │ Non-liniară             │
+└────────────────────────┴─────────────────────────┴─────────────────────────┘
+
+
+11. TIPURI DE TERMOCUPLE ȘI SPECIFICAȚII
+-----------------------------------------
+
+11.1 TYPE K (CHROMEL-ALUMEL)
+-----------------------------
+Cel mai comun tip de termocupla pentru uz general și industrial.
+
+Materiale:
+  Pozitiv (+): Chromel (90% Nichel, 10% Crom)
+  Negativ (-): Alumel (95% Nichel, 2% Mangan, 2% Aluminiu, 1% Silicon)
+
+Specificații:
+  Domeniu de temperatură: -270°C to +1372°C
+  Sensibilitate la 0°C: ~41 µV/°C
+  Cod culoare: Galben (Yellow)
+  Standard: IEC 60584, ASTM E230
+
+Aplicații:
+  - Uz general industrial
+  - Sisteme HVAC
+  - Controlul proceselor
+  - Cuptoare și cazane
+
+Avantaje:
+  + Domeniu larg de temperatură
+  + Cost redus
+  + Bună rezistență la oxidare
+  + Larg disponibil
+
+Dezavantaje:
+  - Deriva magnetică peste 800°C
+  - Nu este potrivit pentru atmosfere reducătoare
+  - Precizie moderată
+
+
+11.2 TYPE J (IRON-CONSTANTAN)
+-------------------------------
+Termocupla pentru industria fierului/oțelului și atmosfere reducătoare.
+
+Materiale:
+  Pozitiv (+): Fier (Fe)
+  Negativ (-): Constantan (55% Cupru, 45% Nichel)
+
+Specificații:
+  Domeniu de temperatură: -210°C to +1200°C
+  Sensibilitate la 0°C: ~52 µV/°C (cea mai mare)
+  Cod culoare: Negru (Black)
+  Standard: IEC 60584, ASTM E230
+
+Aplicații:
+  - Industria fierului și oțelului
+  - Atmosfere reducătoare
+  - Aplicații cu buget limitat
+  - Echipamente vechi (legacy)
+
+Avantaje:
+  + Sensibilitate ridicată
+  + Cost foarte redus
+  + Bun pentru temperaturi medii
+
+Dezavantaje:
+  - Oxidare rapidă peste 540°C
+  - Nu pentru atmosfere oxidante
+  - Domeniu mai limitat decât Type K
+
+
+11.3 TYPE T (COPPER-CONSTANTAN)
+---------------------------------
+Termocupla pentru criogenie și aplicații de laborator.
+
+Materiale:
+  Pozitiv (+): Cupru (Cu)
+  Negativ (-): Constantan (55% Cupru, 45% Nichel)
+
+Specificații:
+  Domeniu de temperatură: -270°C to +400°C
+  Sensibilitate la 0°C: ~41 µV/°C
+  Cod culoare: Albastru (Blue)
+  Standard: IEC 60584, ASTM E230
+
+Aplicații:
+  - Criogenie și temperaturi joase
+  - Industria alimentară
+  - Laborator și cercetare
+  - Medii corozive
+
+Avantaje:
+  + Excelent pentru temperaturi joase
+  + Foarte bună linearitate
+  + Rezistent la umiditate
+  + Precizie bună
+
+Dezavantaje:
+  - Domeniu limitat (max 400°C)
+  - Cuprul oxidează peste 400°C
+
+
+11.4 TYPE E (CHROMEL-CONSTANTAN)
+----------------------------------
+Termocupla cu cea mai mare sensibilitate (output maxim).
+
+Materiale:
+  Pozitiv (+): Chromel (90% Nichel, 10% Crom)
+  Negativ (-): Constantan (55% Cupru, 45% Nichel)
+
+Specificații:
+  Domeniu de temperatură: -270°C to +1000°C
+  Sensibilitate la 0°C: ~61 µV/°C (maximă!)
+  Cod culoare: Violet (Purple)
+  Standard: IEC 60584, ASTM E230
+
+Aplicații:
+  - Criogenie
+  - Generare energie
+  - Detectare precisă schimbări mici
+
+Avantaje:
+  + Sensibilitate maximă (semnal mare)
+  + Excelent raport semnal/zgomot
+  + Bună rezistență la coroziune
+
+Dezavantaje:
+  - Cost mai mare
+  - Puțin folosit (disponibilitate redusă)
+
+
+11.5 TYPE N (NICROSIL-NISIL)
+------------------------------
+Termocupla modernă cu stabilitate îmbunătățită la temperaturi înalte.
+
+Materiale:
+  Pozitiv (+): Nicrosil (84.4% Ni, 14.2% Cr, 1.4% Si)
+  Negativ (-): Nisil (95.5% Ni, 4.4% Si, 0.1% Mg)
+
+Specificații:
+  Domeniu de temperatură: -270°C to +1300°C
+  Sensibilitate la 0°C: ~27 µV/°C
+  Cod culoare: Portocaliu (Orange)
+  Standard: IEC 60584
+
+Aplicații:
+  - Înlocuitor pentru Type K (stabilitate mai bună)
+  - Temperaturi înalte
+  - Atmosfere oxidante
+
+Avantaje:
+  + Stabilitate superioară Type K
+  + Fără deriva magnetică
+  + Rezistență excelentă la oxidare
+
+Dezavantaje:
+  - Cost mai mare decât Type K
+  - Sensibilitate mai mică
+
+
+11.6 TYPE S, R, B (METALE NOBLE - PLATINĂ)
+--------------------------------------------
+Termocuple din platină pentru temperaturi foarte înalte și precizie maximă.
+
+TYPE S: Platină-Platină/Rodiu 10%
+  Domeniu: -50°C to +1768°C
+  Sensibilitate: ~6 µV/°C
+  Aplicații: Farmaceutic, biotech, standarde laborator
+
+TYPE R: Platină-Platină/Rodiu 13%
+  Domeniu: -50°C to +1768°C
+  Sensibilitate: ~6 µV/°C
+  Aplicații: Standarde calibrare, temperaturi foarte înalte
+
+TYPE B: Platină/Rodiu 30%-Platină/Rodiu 6%
+  Domeniu: +200°C to +1820°C
+  Sensibilitate: ~1 µV/°C (foarte mică!)
+  Aplicații: Fabricare sticlă, cuptoare foarte fierbinți
+
+Avantaje:
+  + Precizie maximă
+  + Stabilitate excelentă
+  + Temperaturi extreme
+
+Dezavantaje:
+  - Cost extrem de ridicat
+  - Sensibilitate foarte mică (zgomot)
+  - Fragile (necesită protecție)
+
+
+12. CALCULE TERMOCUPLE ȘI ECUAȚII
+----------------------------------
+
+12.1 POLINOAME NIST ITS-90
+---------------------------
+Standardul NIST (National Institute of Standards and Technology) definește
+polinoame de înaltă precizie pentru conversia temperatură ↔ tensiune.
+
+Forma generală pentru TEMPERATURĂ → TENSIUNE:
+
+  V(T) = c₀ + c₁·T + c₂·T² + c₃·T³ + ... + cₙ·Tⁿ
+
+Unde:
+  V = Tensiune în milivolt (mV)
+  T = Temperatura în grade Celsius (°C)
+  c₀, c₁, ..., cₙ = Coeficienți polinomiali specifici tipului
+
+Pentru Type K (0°C to 1372°C):
+  V(T) = c₀ + c₁·T + c₂·T² + ... + c₉·T⁹ + a₀·exp[a₁(T-a₂)²]
+
+  Coeficienți (primii 5):
+    c₀ = -0.176004136860 x 10⁻¹
+    c₁ =  0.389212049750 x 10⁻¹
+    c₂ =  0.185587700320 x 10⁻⁴
+    c₃ = -0.994575928740 x 10⁻⁷
+    c₄ =  0.318409457190 x 10⁻⁹
+    ...plus termen exponențial
+
+
+12.2 COMPENSAREA JONCȚIUNII RECI
+----------------------------------
+Termocuplele măsoară diferența de temperatură între cele două joncțiuni.
+Pentru a obține temperatura absolută, trebuie compensată temperatura
+joncțiunii reci (Cold Junction Compensation - CJC).
+
+Temperatura măsurată = Temperatura calculată din V + Temperatura joncțiune rece
+
+Metode de CJC:
+1. Baie de gheață la 0°C (laborator)
+2. Senzor RTD/termistor la joncțiune (industrial)
+3. Compensare electronică (circuite specializate)
+
+În aplicația RTD Master Pro:
+- Utilizatorul poate seta manual temperatura joncțiunii reci
+- Valoare implicită: 25°C (temperatura camerei)
+- Calcul automat cu compensare
+
+
+12.3 CALCUL INVERS (TENSIUNE → TEMPERATURĂ)
+---------------------------------------------
+Pentru conversia inversă, se folosește metoda Newton-Raphson pentru a rezolva
+ecuația polinomială iterativ.
+
+Algoritmul:
+1. Compensare CJC: V_compensat = V_măsurat + V(T_joncțiune_rece)
+2. Estimare inițială: T₀ = 0°C
+3. Iterare Newton-Raphson:
+   T_(n+1) = T_n - [V(T_n) - V_compensat] / [dV/dT(T_n)]
+4. Repetă până la convergență (|T_(n+1) - T_n| < toleranță)
+
+
+13. UTILIZARE TERMOCUPLE ÎN RTD MASTER PRO
+-------------------------------------------
+
+13.1 SELECTARE MOD TERMOCUPLA
+-------------------------------
+1. Deschide RTD Master Pro
+2. În secțiunea "Measurement Mode", selectează "Thermocouple"
+3. Interfața se va schimba pentru a afișa controale specifice termocuplei
+
+13.2 CONFIGURARE TERMOCUPLA
+-----------------------------
+1. Type: Selectează tipul termocuplei (K, J, T, E, N, S, R, B)
+2. Range: Afișat automat pentru tipul selectat
+3. Sensitivity: Afișat automat (µV/°C)
+4. Cold Junction Temp: Setează temperatura joncțiunii reci (implicit 25°C)
+
+13.3 CONVERSII SUPORTATE
+-------------------------
+
+MOD 1: TEMPERATURĂ → TENSIUNE
+  Input: Temperatura în °C
+  Output: Tensiune în mV
+  Exemplu Type K:
+    500°C → 20.644 mV
+
+MOD 2: TENSIUNE → TEMPERATURĂ
+  Input: Tensiune în mV
+  Output: Temperatura în °C (cu compensare CJC)
+  Exemplu Type K:
+    20.644 mV (CJC=25°C) → ~500°C
+
+13.4 EXEMPLE PRACTICE
+----------------------
+
+Exemplu 1: Măsurare temperatură cuptor cu Type K
+  - Tensiune măsurată: 35.2 mV
+  - Joncțiune rece: 23°C
+  - Selectează: Type K, Voltage → Temperature
+  - Input: 35.2 mV, CJC: 23°C
+  - Output: ~852°C
+
+Exemplu 2: Calcul tensiune așteptată Type J
+  - Temperatură cuptor: 600°C
+  - Selectează: Type J, Temperature → Voltage
+  - Input: 600°C
+  - Output: ~33.277 mV
+
+
+================================================================================
+ANEXA B: FORMULE TERMOCUPLE REFERINȚĂ RAPIDĂ
+================================================================================
+
+TYPE K (0°C to 500°C - aproximare simplificată):
+  V(T) ≈ 0.04 mV/°C × T
+  Exemplu: 100°C → ~4.0 mV
+
+TYPE J (0°C to 500°C):
+  V(T) ≈ 0.05 mV/°C × T
+  Exemplu: 100°C → ~5.0 mV
+
+TYPE T (0°C to 200°C):
+  V(T) ≈ 0.04 mV/°C × T
+  Exemplu: 100°C → ~4.0 mV
+
+Notă: Acestea sunt aproximări liniare. Pentru precizie maximă,
+      aplicația folosește polinoamele complete NIST ITS-90.
+
+
+================================================================================
+REFERINȚE SUPLIMENTARE TERMOCUPLE
+================================================================================
+
+[7] IEC 60584-1:2013
+    "Termocuple - Partea 1: Tabele de referință EMF"
+    Comisia Electrotehnică Internațională, 2013
+
+[8] ASTM E230/E230M-17
+    "Specificație Standard și Tabele de Temperatură-EMF pentru
+     Termocuple Standardizate"
+    ASTM International, 2017
+
+[9] NIST ITS-90 Thermocouple Database
+    https://srdata.nist.gov/its90/main/
+    National Institute of Standards and Technology
+
+[10] Manual on the Use of Thermocouples in Temperature Measurement
+     ASTM Manual Series MNL 12, Fourth Edition, 1993
+
+================================================================================
+SFÂRȘITUL DOCUMENTAȚIEI TEHNICE
+================================================================================

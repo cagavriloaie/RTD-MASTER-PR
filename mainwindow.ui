@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>750</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1050</width>
+    <height>700</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1200</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>RTD MASTER - Professional Temperature Sensor Calculator</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Professional RTD Master Theme */
+/* Color Palette:
+   - Primary: #1e3a8a (Navy Blue)
+   - Secondary: #0891b2 (Cyan)
+   - Success: #059669 (Green)
+   - Warning: #d97706 (Amber)
+   - Info: #2563eb (Blue)
+   - Background: #f8fafc
+   - Surface: #ffffff
+   - Border: #cbd5e1
+   - Text: #1e293b
+*/
+
+QMainWindow {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f8fafc, stop:1 #e2e8f0);
+}
+
+/* Global Font Settings */
+* {
+    font-family: &quot;Segoe UI&quot;, &quot;Roboto&quot;, &quot;Arial&quot;, sans-serif;
+    font-size: 10pt;
+}
+
+/* Group Box Styling */
+QGroupBox {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #1e293b;
+    background-color: #ffffff;
+    border: 2px solid #0891b2;
+    border-radius: 10px;
+    margin-top: 14px;
+    padding-top: 20px;
+    padding: 16px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 18px;
+    top: -8px;
+    padding: 6px 14px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #0891b2, stop:1 #06b6d4);
+    color: white;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Label Styling */
+QLabel {
+    font-size: 10pt;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* ComboBox Styling */
+QComboBox {
+    font-size: 10pt;
+    padding: 7px 10px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: white;
+    color: #1e293b;
+    min-height: 22px;
+}
+
+QComboBox:hover {
+    border: 2px solid #0891b2;
+    background-color: #f0fdfa;
+}
+
+QComboBox:focus {
+    border: 2px solid #0284c7;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 28px;
+    background: transparent;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 7px solid #64748b;
+    margin-right: 6px;
+}
+
+QComboBox::down-arrow:hover {
+    border-top: 7px solid #0891b2;
+}
+
+/* SpinBox Styling */
+QDoubleSpinBox {
+    font-size: 10pt;
+    font-weight: 500;
+    padding: 6px 26px 6px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background-color: white;
+    color: #1e293b;
+    min-height: 20px;
+}
+
+QDoubleSpinBox:hover {
+    border: 1px solid #0891b2;
+    background-color: white;
+}
+
+QDoubleSpinBox:focus {
+    border: 1px solid #0284c7;
+    background-color: white;
+}
+
+QDoubleSpinBox:read-only {
+    background-color: white;
+    color: #475569;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+}
+
+QDoubleSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 22px;
+    border: none;
+    border-left: 1px solid #cbd5e1;
+    border-top-right-radius: 3px;
+    background-color: white;
+}
+
+QDoubleSpinBox::up-button:hover {
+    background-color: #0891b2;
+    border-left: 1px solid #0891b2;
+}
+
+QDoubleSpinBox::up-button:pressed {
+    background-color: #0284c7;
+    border-left: 1px solid #0284c7;
+}
+
+QDoubleSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 22px;
+    border: none;
+    border-left: 1px solid #cbd5e1;
+    border-bottom-right-radius: 3px;
+    background-color: white;
+}
+
+QDoubleSpinBox::down-button:hover {
+    background-color: #0891b2;
+    border-left: 1px solid #0891b2;
+}
+
+QDoubleSpinBox::down-button:pressed {
+    background-color: #0284c7;
+    border-left: 1px solid #0284c7;
+}
+
+QDoubleSpinBox::up-arrow {
+    image: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid #64748b;
+    width: 0px;
+    height: 0px;
+}
+
+QDoubleSpinBox::up-arrow:hover {
+    border-bottom: 5px solid white;
+}
+
+QDoubleSpinBox::down-arrow {
+    image: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #64748b;
+    width: 0px;
+    height: 0px;
+}
+
+QDoubleSpinBox::down-arrow:hover {
+    border-top: 5px solid white;
+}
+
+QDoubleSpinBox:read-only::up-button,
+QDoubleSpinBox:read-only::down-button {
+    background-color: white;
+    border-left: 2px solid #cbd5e1;
+}
+
+QDoubleSpinBox:read-only::up-arrow,
+QDoubleSpinBox:read-only::down-arrow {
+    border-bottom-color: #94a3b8;
+    border-top-color: #94a3b8;
+}
+
+/* LineEdit Styling */
+QLineEdit {
+    font-size: 10pt;
+    padding: 7px 10px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: white;
+    color: #1e293b;
+    selection-background-color: #0891b2;
+    selection-color: white;
+}
+
+QLineEdit:hover {
+    border: 2px solid #0891b2;
+}
+
+QLineEdit:focus {
+    border: 2px solid #0284c7;
+}
+
+QLineEdit:read-only {
+    background-color: white;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* Button Styling */
+QPushButton {
+    font-size: 10pt;
+    font-weight: 600;
+    color: white;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #0891b2, stop:1 #0e7490);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    min-height: 26px;
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #06b6d4, stop:1 #0891b2);
+}
+
+QPushButton:pressed {
+    background-color: #0e7490;
+}
+
+/* PlainTextEdit Styling */
+QPlainTextEdit {
+    font-size: 10pt;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;, monospace;
+    background-color: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 7px;
+    padding: 12px;
+    color: #1e293b;
+    selection-background-color: #0891b2;
+    selection-color: white;
+}
+
+QPlainTextEdit:focus {
+    border: 2px solid #0891b2;
+}
+
+/* Tolerance Label Special Styling */
+#labelTolerance {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #065f46;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                stop:0 #d1fae5, stop:1 #a7f3d0);
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 2px solid #10b981;
+}
+
+/* Radio Button Styling */
+QRadioButton {
+    font-size: 10pt;
+    color: #1e293b;
+    spacing: 8px;
+}
+
+QRadioButton::indicator {
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    border: 2px solid #cbd5e1;
+    background-color: white;
+}
+
+QRadioButton::indicator:hover {
+    border: 2px solid #0891b2;
+    background-color: #f0fdfa;
+}
+
+QRadioButton::indicator:checked {
+    border: 2px solid #0891b2;
+    background: qradialgradient(cx:0.5, cy:0.5, radius:0.4,
+                                fx:0.5, fy:0.5,
+                                stop:0 #0891b2, stop:0.5 #0891b2,
+                                stop:0.51 white, stop:1 white);
+}
+
+/* Menu Bar Styling */
+QMenuBar {
+    background-color: #1e293b;
+    color: white;
+    border-bottom: 2px solid #0891b2;
+    padding: 3px;
+    font-size: 9pt;
+}
+
+QMenuBar::item {
+    background-color: transparent;
+    padding: 4px 10px;
+    margin: 1px;
+    border-radius: 3px;
+}
+
+QMenuBar::item:selected {
+    background-color: #334155;
+}
+
+QMenuBar::item:pressed {
+    background-color: #0891b2;
+}
+
+/* Menu Styling */
+QMenu {
+    background-color: white;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+QMenu::item {
+    padding: 8px 24px 8px 12px;
+    border-radius: 4px;
+    color: #1e293b;
+}
+
+QMenu::item:selected {
+    background-color: #f0fdfa;
+    color: #0891b2;
+}
+
+QMenu::separator {
+    height: 2px;
+    background-color: #e2e8f0;
+    margin: 4px 8px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>RTD Configuration</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Standard:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="comboStandard"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Material:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboMaterial"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Alpha Coefficient:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="comboAlpha"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>R0 (Ω at 0°C):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="comboR0"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Tolerance Class:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="comboTolerance"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>1</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="title">
+         <string>Conversion</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Mode:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="comboConversionMode"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelInput">
+           <property name="text">
+            <string>Temperature (°C):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinInput">
+           <property name="minimum">
+            <double>-273.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelOutput">
+           <property name="text">
+            <string>Resistance (Ω):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinOutput">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="maximum">
+            <double>10000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="labelToleranceLabel">
+           <property name="text">
+            <string>Tolerance (°C):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QDoubleSpinBox" name="doubleSpinTolerance">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="minimum">
+            <double>0.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
+           </property>
+           <property name="decimals">
+            <number>3</number>
+           </property>
+           <property name="prefix">
+            <string>±</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QPushButton" name="btnCalculate">
+           <property name="text">
+            <string>Calculate</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Information</string>
+      </property>
+      <property name="maximumHeight">
+       <number>180</number>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPlainTextEdit" name="textInfo">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="maximumHeight">
+          <number>150</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>750</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionMinimize"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="title">
+     <string>Language</string>
+    </property>
+    <addaction name="actionEnglish"/>
+    <addaction name="actionRomanian"/>
+    <addaction name="actionGerman"/>
+    <addaction name="actionFrench"/>
+    <addaction name="actionSpanish"/>
+    <addaction name="actionRussian"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowGraph"/>
+    <addaction name="actionShowTCGraph"/>
+    <addaction name="separator"/>
+    <addaction name="actionTechnicalDoc"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuLanguage"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionRomanian">
+   <property name="text">
+    <string>Română</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGerman">
+   <property name="text">
+    <string>Deutsch</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionFrench">
+   <property name="text">
+    <string>Français</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionSpanish">
+   <property name="text">
+    <string>Español</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionRussian">
+   <property name="text">
+    <string>Русский</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About Temperature Master Pro</string>
+   </property>
+   <property name="shortcut">
+    <string>F12</string>
+   </property>
+  </action>
+  <action name="actionTechnicalDoc">
+   <property name="text">
+    <string>Technical Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionMinimize">
+   <property name="text">
+    <string>Minimize</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionShowGraph">
+   <property name="text">
+    <string>Show R-T Curves</string>
+   </property>
+   <property name="toolTip">
+    <string>Display Resistance vs Temperature curves</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionShowTCGraph">
+   <property name="text">
+    <string>Show TC Voltage Curves</string>
+   </property>
+   <property name="toolTip">
+    <string>Display Thermocouple Voltage vs Temperature curves</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

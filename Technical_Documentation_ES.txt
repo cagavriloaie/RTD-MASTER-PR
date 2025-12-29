@@ -1,0 +1,863 @@
+================================================================================
+RTD MASTER PRO - DOCUMENTACIÓN TÉCNICA
+================================================================================
+
+VERSIÓN DEL DOCUMENTO: 1.2
+ÚLTIMA ACTUALIZACIÓN: Diciembre 2025
+
+================================================================================
+TABLA DE CONTENIDOS
+================================================================================
+PARTE I: RTD (DETECTORES DE TEMPERATURA POR RESISTENCIA)
+1. DESCRIPCIÓN GENERAL
+2. ESTÁNDARES INTERNACIONALES
+3. MATERIALES Y ESPECIFICACIONES RTD
+4. MÉTODOS DE CÁLCULO Y ECUACIONES
+5. ESPECIFICACIONES DE TOLERANCIA
+6. RANGOS DE TEMPERATURA
+7. CARACTERÍSTICAS DEL PROGRAMA
+8. IMPLEMENTACIÓN TÉCNICA
+9. REFERENCIAS
+
+================================================================================
+PARTE II: TERMOPARES
+10. TERMOPARES - DESCRIPCIÓN GENERAL
+11. TIPOS Y ESPECIFICACIONES DE TERMOPARES
+12. CÁLCULOS Y ECUACIONES DE TERMOPARES
+13. USO DE TERMOPARES EN RTD MASTER PRO
+
+
+================================================================================
+PARTE I: RTD (DETECTORES DE TEMPERATURA POR RESISTENCIA)
+================================================================================
+
+1. DESCRIPCIÓN GENERAL
+================================================================================
+
+RTD Master Pro es una aplicación de escritorio de grado profesional diseñada para
+mediciones precisas de temperatura utilizando tanto sensores RTD (Detector de
+Temperatura por Resistencia) como termopares, de acuerdo con múltiples estándares
+internacionales.
+
+SENSORES RTD:
+Dispositivos de medición de temperatura de precisión que explotan el cambio
+predecible en la resistencia eléctrica de metales puros con la temperatura.
+
+TERMOPARES:
+Sensores de temperatura que generan voltaje eléctrico basado en el efecto Seebeck,
+ideales para temperaturas extremas y respuesta rápida.
+
+La aplicación implementa ecuaciones estandarizadas y coeficientes definidos por
+organizaciones internacionales de metrología (IEC, NIST, ASTM, GOST).
+
+Los sensores RTD son dispositivos de medición de temperatura de precisión que
+explotan el cambio predecible en la resistencia eléctrica de metales puros con
+la temperatura. Esta aplicación implementa las ecuaciones estandarizadas y
+coeficientes definidos por organizaciones internacionales de metrología.
+
+
+================================================================================
+2. ESTÁNDARES INTERNACIONALES
+================================================================================
+
+2.1 IEC 60751:2008
+-------------------
+Título: "Termómetros de resistencia de platino industriales y sensores de
+        temperatura de platino"
+Organización: Comisión Electrotécnica Internacional
+Alcance: Especifica requisitos y tolerancias para RTD de platino industriales
+Rango de Temperatura (Platino): -200°C a +850°C
+Coeficiente Primario: α = 0.00385 Ω/Ω/°C (Pt385)
+Clases de Tolerancia: AA, A, B (anteriormente 1/10 DIN, 1/3 DIN, DIN)
+
+Valores Estándar: Pt100, Pt500, Pt1000
+Coeficientes de Callendar-Van Dusen para Pt385:
+  A = 3.9083 x 10^-3  °C^-1
+  B = -5.775 x 10^-7  °C^-2
+  C = -4.183 x 10^-12 °C^-4 (solo para T < 0°C)
+
+
+2.2 GOST 6651-2009
+-------------------
+Título: "Termómetros de Resistencia, Sensores de Resistencia Térmica y
+        Termopares de Resistencia"
+Organización: Consejo Interestatal para la Estandarización (países de la CEI)
+Alcance: Estándar ruso/soviético para especificaciones RTD
+Rango de Temperatura (Platino): -200°C a +600°C
+Coeficiente Primario: α = 0.00391 Ω/Ω/°C (Pt391)
+
+Coeficientes de Callendar-Van Dusen para Pt391:
+  A =  3.96847 x 10^-3  °C^-1
+  B = -5.847   x 10^-7  °C^-2
+  C = -4.35    x 10^-12 °C^-4 (solo para T < 0°C)
+
+Nota: También especifica RTDs de cobre (Cu426) y níquel
+
+
+2.3 ASTM E1137/E1137M-20
+-------------------------
+Título: "Especificación Estándar para Termómetros de Resistencia de Platino
+        Industriales"
+Organización: Sociedad Americana de Ensayos y Materiales
+Alcance: Estándar norteamericano para RTD de platino industriales
+Rango de Temperatura: -200°C a +850°C
+Coeficiente: α = 0.00385 Ω/Ω/°C (igual que IEC 60751)
+
+Nota: ASTM E1137 se alinea con IEC 60751 para compatibilidad internacional
+Grados de Tolerancia: Grado A, Grado B (equivalente a Clases IEC)
+
+
+2.4 Estándar Estadounidense Heredado
+-------------------------------------
+Estándar americano histórico (anterior a la alineación ASTM)
+Coeficiente: α = 0.00392 Ω/Ω/°C (Pt392)
+Rango de Temperatura: -200°C a +850°C
+
+Coeficientes de Callendar-Van Dusen para Pt392:
+  A =  3.9848 x 10^-3  °C^-1
+  B = -5.870  x 10^-7  °C^-2
+  C = -4.40   x 10^-12 °C^-4 (solo para T < 0°C)
+
+
+================================================================================
+3. MATERIALES Y ESPECIFICACIONES RTD
+================================================================================
+
+3.1 RTDs DE PLATINO
+-------------------
+Material RTD más común y estable. Excelente linealidad y estabilidad.
+
+Configuraciones Estándar:
+┌──────────┬────────────┬────────────────────────────────────────────┐
+│  Tipo    │  R0 (0°C)  │  Aplicaciones Comunes                      │
+├──────────┼────────────┼────────────────────────────────────────────┤
+│  Pt100   │  100 Ω     │  Industrial, HVAC, control de procesos     │
+│  Pt500   │  500 Ω     │  Laboratorio, mediciones de alta precisión │
+│  Pt1000  │  1000 Ω    │  Automotriz, automatización de edificios   │
+└──────────┴────────────┴────────────────────────────────────────────┘
+
+Coeficientes de Temperatura:
+  α₃₈₅ = 0.00385 Ω/Ω/°C  (IEC 60751, ASTM E1137, DIN 43760)
+  α₃₉₁ = 0.00391 Ω/Ω/°C  (GOST 6651)
+  α₃₉₂ = 0.00392 Ω/Ω/°C  (Estadounidense heredado)
+
+Rango de Temperatura Típico: -200°C a +850°C (algunos hasta +1000°C)
+
+
+3.2 RTDs DE COBRE
+-----------------
+Bajo costo, buena linealidad, rango de temperatura limitado.
+
+Configuraciones Estándar:
+┌──────────┬────────────┬────────────────────────────────────────────┐
+│  Tipo    │  R0 (0°C)  │  Aplicaciones Comunes                      │
+├──────────┼────────────┼────────────────────────────────────────────┤
+│  Cu50    │  50 Ω      │  Monitoreo de temperatura de bobinados     │
+│  Cu100   │  100 Ω     │  Monitoreo de motores y transformadores    │
+└──────────┴────────────┴────────────────────────────────────────────┘
+
+Coeficientes de Temperatura:
+  α₄₂₆ = 0.00426 Ω/Ω/°C  (GOST 6651)
+  α₄₂₇ = 0.00427 Ω/Ω/°C  (IEC 60751)
+  α₄₂₈ = 0.00428 Ω/Ω/°C  (Algunos fabricantes)
+
+Rango de Temperatura: -50°C a +150°C (oxidación por encima de 150°C)
+
+
+3.3 RTDs DE NÍQUEL
+------------------
+Alta sensibilidad, no lineal, rango de temperatura moderado.
+
+Configuraciones Estándar:
+┌──────────┬────────────┬────────────┬───────────────────────────────┐
+│  Tipo    │  R0 (0°C)  │  Valor α   │  Aplicaciones Comunes         │
+├──────────┼────────────┼────────────┼───────────────────────────────┤
+│  Ni100   │  100 Ω     │  0.00617   │  HVAC, uso general            │
+│  Ni120   │  120 Ω     │  0.00672   │  Aplicaciones HVAC europeas   │
+│  Ni1000  │  1000 Ω    │  0.00618   │  Automotriz, electrodomésticos│
+└──────────┴────────────┴────────────┴───────────────────────────────┘
+
+Rango de Temperatura: -60°C a +180°C (aplicaciones estándar)
+
+
+================================================================================
+4. MÉTODOS DE CÁLCULO Y ECUACIONES
+================================================================================
+
+4.1 CÁLCULO RTD DE PLATINO - Ecuación de Callendar-Van Dusen
+-------------------------------------------------------------
+
+La ecuación de Callendar-Van Dusen es el método internacionalmente aceptado para
+calcular la resistencia RTD de platino en función de la temperatura.
+
+Para T ≥ 0°C:
+  R(T) = R₀(1 + AT + BT²)
+
+Para T < 0°C:
+  R(T) = R₀[1 + AT + BT² + C(T - 100)T³]
+
+Donde:
+  R(T) = Resistencia a temperatura T (en Ω)
+  R₀   = Resistencia nominal a 0°C (en Ω)
+  T    = Temperatura (en °C)
+  A, B, C = Coeficientes de Callendar-Van Dusen
+
+VALORES DE COEFICIENTES:
+
+Pt385 (IEC 60751, ASTM E1137):
+  A =  3.9083 × 10⁻³  °C⁻¹
+  B = -5.775  × 10⁻⁷  °C⁻²
+  C = -4.183  × 10⁻¹² °C⁻⁴
+
+Pt391 (GOST 6651):
+  A =  3.96847 × 10⁻³  °C⁻¹
+  B = -5.847   × 10⁻⁷  °C⁻²
+  C = -4.35    × 10⁻¹² °C⁻⁴
+
+Pt392 (Estadounidense heredado):
+  A =  3.9848 × 10⁻³  °C⁻¹
+  B = -5.870  × 10⁻⁷  °C⁻²
+  C = -4.40   × 10⁻¹² °C⁻⁴
+
+
+CÁLCULO INVERSO (Resistencia → Temperatura):
+
+Para R ≥ R₀ (T ≥ 0°C):
+  Resolver ecuación cuadrática: BT² + AT + (1 - R/R₀) = 0
+
+  T = (-A + √(A² - 4B(1 - R/R₀))) / (2B)
+
+Para R < R₀ (T < 0°C):
+  Resolver ecuación cúbica iterativamente usando métodos numéricos (Newton-Raphson)
+
+
+4.2 CÁLCULO RTD DE COBRE Y NÍQUEL - Aproximación Lineal
+--------------------------------------------------------
+
+Los RTDs de cobre y níquel utilizan una relación lineal simplificada debido a sus
+rangos de temperatura más estrechos y diferentes propiedades físicas.
+
+Cálculo Directo (Temperatura → Resistencia):
+  R(T) = R₀(1 + αT)
+
+Cálculo Inverso (Resistencia → Temperatura):
+  T = (R - R₀) / (R₀ × α)
+
+Donde:
+  R(T) = Resistencia a temperatura T (en Ω)
+  R₀   = Resistencia nominal a 0°C (en Ω)
+  α    = Coeficiente de temperatura de resistencia (en Ω/Ω/°C)
+  T    = Temperatura (en °C)
+
+
+COEFICIENTES DE COBRE:
+  α₄₂₆ = 0.00426 Ω/Ω/°C
+  α₄₂₇ = 0.00427 Ω/Ω/°C
+  α₄₂₈ = 0.00428 Ω/Ω/°C
+
+COEFICIENTES DE NÍQUEL:
+  α₆₁₇ = 0.00617 Ω/Ω/°C (Ni100)
+  α₆₁₈ = 0.00618 Ω/Ω/°C (Ni1000)
+  α₆₇₂ = 0.00672 Ω/Ω/°C (Ni120)
+
+
+================================================================================
+5. ESPECIFICACIONES DE TOLERANCIA
+================================================================================
+
+5.1 CLASES DE TOLERANCIA IEC 60751 (RTDs de Platino)
+-----------------------------------------------------
+
+Clase AA (Máxima Precisión):
+  Tolerancia = ±(0.1 + 0.0017|t|) °C
+
+  Ejemplos:
+    A   0°C: ±0.10°C
+    A  50°C: ±0.185°C
+    A 100°C: ±0.27°C
+    A 200°C: ±0.44°C
+
+Clase A (Precisión Estándar):
+  Tolerancia = ±(0.15 + 0.002|t|) °C
+
+  Ejemplos:
+    A   0°C: ±0.15°C
+    A  50°C: ±0.25°C
+    A 100°C: ±0.35°C
+    A 200°C: ±0.55°C
+
+Clase B (Uso General):
+  Tolerancia = ±(0.3 + 0.005|t|) °C
+
+  Ejemplos:
+    A   0°C: ±0.30°C
+    A  50°C: ±0.55°C
+    A 100°C: ±0.80°C
+    A 200°C: ±1.30°C
+
+Clase C (Menor Precisión):
+  Tolerancia = ±(0.6 + 0.01|t|) °C
+
+  Ejemplos:
+    A   0°C: ±0.60°C
+    A  50°C: ±1.10°C
+    A 100°C: ±1.60°C
+    A 200°C: ±2.60°C
+
+Donde |t| es el valor absoluto de la temperatura en °C
+
+
+5.2 TOLERANCIA DE RESISTENCIA A 0°C
+------------------------------------
+
+Para sensores Pt100:
+  Clase AA: ±0.04 Ω a 0°C
+  Clase A:  ±0.06 Ω a 0°C
+  Clase B:  ±0.12 Ω a 0°C
+  Clase C:  ±0.24 Ω a 0°C
+
+
+================================================================================
+6. RANGOS DE TEMPERATURA
+================================================================================
+
+6.1 RANGOS DE TEMPERATURA POR ESTÁNDAR Y MATERIAL
+--------------------------------------------------
+
+┌─────────────────┬───────────────┬───────────────┬───────────────┐
+│  Estándar       │  Platino     │  Cobre       │  Níquel      │
+├─────────────────┼───────────────┼───────────────┼───────────────┤
+│  IEC 60751      │  -200 a 850°C │  -50 a 150°C  │  -60 a 180°C  │
+│  GOST 6651      │  -200 a 600°C │  -50 a 150°C  │  -60 a 180°C  │
+│  ASTM E1137     │  -200 a 850°C │  -50 a 150°C  │  -60 a 180°C  │
+│  EE.UU. heredado│  -200 a 850°C │  -50 a 150°C  │  -60 a 180°C  │
+└─────────────────┴───────────────┴───────────────┴───────────────┘
+
+Nota: Los sensores de platino de rango extendido pueden alcanzar -270°C a +1000°C
+      con especificaciones de tolerancia modificadas.
+
+
+6.2 RANGOS DE RESISTENCIA PARA Pt100
+-------------------------------------
+
+En temperaturas mínimas y máximas (usando coeficiente Pt385):
+
+Temperatura    Resistencia (Pt100)
+-200°C         18.52 Ω
+-100°C         60.26 Ω
+   0°C        100.00 Ω
+ 100°C        138.51 Ω
+ 200°C        175.86 Ω
+ 400°C        247.09 Ω
+ 600°C        316.16 Ω
+ 850°C        390.48 Ω
+
+
+================================================================================
+7. CARACTERÍSTICAS DEL PROGRAMA
+================================================================================
+
+7.1 CAPACIDADES PRINCIPALES
+----------------------------
+- Conversión bidireccional (Temperatura ↔ Resistencia)
+- Soporte para 4 estándares internacionales
+- 3 tipos de materiales RTD (Platino, Cobre, Níquel)
+- Múltiples coeficientes alfa por material
+- 4 clases de tolerancia (AA, A, B, C)
+- Cálculo de tolerancia en tiempo real
+- Ajuste dinámico de rango basado en la selección de estándar y material
+
+
+7.2 INTERFAZ DE USUARIO
+-----------------------
+- Diseño profesional moderno con secciones codificadas por colores
+- Fuentes grandes legibles (11-14pt)
+- Selectores desplegables intuitivos
+- Campos de entrada/salida claros con unidades
+- Visualización de tolerancia destacada
+- Panel de información que muestra la configuración actual
+- Diseño responsivo
+
+
+7.3 CONFIGURACIONES SOPORTADAS
+-------------------------------
+
+RTDs de Platino:
+  - Pt100, Pt500, Pt1000
+  - Coeficientes: 0.00385, 0.00391, 0.00392
+
+RTDs de Cobre:
+  - Cu50, Cu100
+  - Coeficientes: 0.00426, 0.00427, 0.00428
+
+RTDs de Níquel:
+  - Ni100, Ni120, Ni1000
+  - Coeficientes: 0.00617, 0.00618, 0.00672
+
+
+================================================================================
+8. IMPLEMENTACIÓN TÉCNICA
+================================================================================
+
+8.1 ARQUITECTURA DE SOFTWARE
+-----------------------------
+Lenguaje: C++17
+Framework GUI: Qt 5.x / 6.x
+Sistema de Compilación: qmake
+Soporte de Plataforma: Windows, Linux, macOS
+
+Componentes:
+  - rtdcalculator.cpp/h: Motor de cálculo principal
+  - mainwindow.cpp/h: Lógica GUI y manejo de eventos
+  - mainwindow.ui: Definición de interfaz Qt Designer
+  - main.cpp: Punto de entrada de la aplicación
+
+
+8.2 PRECISIÓN DE CÁLCULO
+-------------------------
+- Aritmética de punto flotante de doble precisión (IEEE 754)
+- Precisión numérica: ~15-17 dígitos decimales significativos
+- Solucionador iterativo para Callendar-Van Dusen inverso (T < 0°C)
+- Tolerancia de convergencia: 1×10⁻⁶ °C
+
+
+8.3 VALIDACIÓN DE ENTRADA
+--------------------------
+- Aplicación de rango de temperatura basada en el estándar seleccionado
+- Cálculo automático de rango de resistencia basado en R₀ y coeficientes
+- Prevención de cálculos fuera de rango
+- Actualizaciones automáticas de rango en cambios de configuración
+
+
+================================================================================
+9. REFERENCIAS
+================================================================================
+
+[1] IEC 60751:2008
+    "Termómetros de resistencia de platino industriales y sensores de
+     temperatura de platino"
+    Comisión Electrotécnica Internacional, 2008
+
+[2] GOST 6651-2009
+    "Termómetros de Resistencia, Sensores de Resistencia Térmica y Termopares
+     de Resistencia. Requisitos Técnicos Generales y Métodos de Ensayo"
+    Consejo Interestatal para la Estandarización, Metrología y Certificación, 2009
+
+[3] ASTM E1137/E1137M-20
+    "Especificación Estándar para Termómetros de Resistencia de Platino
+     Industriales"
+    ASTM International, 2020
+
+[4] DIN EN 60751:2009-05
+    "Termómetros de resistencia de platino industriales y sensores de
+     temperatura de platino (IEC 60751:2008)"
+    Instituto Alemán de Normalización, 2009
+
+[5] H.D. Burns y M. Scroger
+    "La Ecuación de Callendar-Van Dusen y su Aplicación"
+    Nota Técnica NIST, 1988
+
+[6] Nicholas, J.V., White, D.R.
+    "Temperaturas Rastreables: Una Introducción a la Medición de Temperatura
+     y Calibración"
+    John Wiley & Sons, 2001
+
+
+================================================================================
+APÉNDICE A: FÓRMULAS DE REFERENCIA RÁPIDA
+================================================================================
+
+Pt100 a Temperatura T (Pt385):
+  0°C:  R = 100.00 Ω
+  Temperatura a Resistencia: R = 100(1 + 0.0039083T - 0.0000005775T²)
+
+Cu100 a Temperatura T (Cu427):
+  0°C:  R = 100.00 Ω
+  Temperatura a Resistencia: R = 100(1 + 0.00427T)
+
+Ni100 a Temperatura T (Ni617):
+  0°C:  R = 100.00 Ω
+  Temperatura a Resistencia: R = 100(1 + 0.00617T)
+
+
+================================================================================
+
+
+
+================================================================================
+PARTE II: TERMOPARES
+================================================================================
+
+10. TERMOPARES - DESCRIPCIÓN GENERAL
+-------------------------------------
+
+10.1 ¿QUÉ SON LOS TERMOPARES?
+------------------------------
+Un termopar es un sensor de temperatura que genera un voltaje eléctrico
+(fuerza electromotriz termoeléctrica) proporcional a la diferencia de temperatura
+entre dos uniones de metales diferentes. Se basa en el efecto Seebeck,
+descubierto en 1821 por Thomas Johann Seebeck.
+
+Principio de operación:
+- Dos cables de metales diferentes se unen en un extremo (unión de medición)
+- El otro extremo está a una temperatura de referencia (unión fría)
+- La diferencia de temperatura genera un pequeño voltaje (µV-mV)
+- El voltaje es directamente proporcional a la temperatura medida
+
+
+10.2 COMPARACIÓN RTD vs TERMOPAR
+---------------------------------
+
+┌────────────────────────┬─────────────────────────┬─────────────────────────┐
+│ Característica         │ RTD                     │ Termopar                │
+├────────────────────────┼─────────────────────────┼─────────────────────────┤
+│ Principio              │ Resistencia eléctrica   │ Voltaje termoeléctrico  │
+│ Señal de salida        │ Ohm (Ω)                 │ Milivoltio (mV)         │
+│ Rango de temperatura   │ -200°C a +850°C         │ -270°C a +1820°C        │
+│ Precisión              │ ±0.1°C a ±0.001°C       │ ±0.5°C a ±2°C           │
+│ Tiempo de respuesta    │ Lento (segundos)        │ Rápido (milisegundos)   │
+│ Estabilidad            │ Excelente               │ Buena (deriva con tiempo)│
+│ Costo                  │ Mayor                   │ Menor                   │
+│ Fuente de alimentación │ Requerida (corriente)   │ Auto-generado           │
+│ Tamaño                 │ Mayor                   │ Muy pequeño (puntual)   │
+│ Linealidad             │ Buena                   │ No lineal               │
+└────────────────────────┴─────────────────────────┴─────────────────────────┘
+
+
+11. TIPOS Y ESPECIFICACIONES DE TERMOPARES
+-----------------------------------------
+
+11.1 TIPO K (CHROMEL-ALUMEL)
+----------------------------
+El tipo de termopar más común para uso general e industrial.
+
+Materiales:
+  Positivo (+): Chromel (90% Níquel, 10% Cromo)
+  Negativo (-): Alumel (95% Níquel, 2% Manganeso, 2% Aluminio, 1% Silicio)
+
+Especificaciones:
+  Rango de temperatura: -270°C a +1372°C
+  Sensibilidad a 0°C: ~41 µV/°C
+  Código de color: Amarillo
+  Estándar: IEC 60584, ASTM E230
+
+Aplicaciones:
+  - Industrial de uso general
+  - Sistemas HVAC
+  - Control de procesos
+  - Hornos y calderas
+
+Ventajas:
+  + Amplio rango de temperatura
+  + Bajo costo
+  + Buena resistencia a la oxidación
+  + Ampliamente disponible
+
+Desventajas:
+  - Deriva magnética por encima de 800°C
+  - No apto para atmósferas reductoras
+  - Precisión moderada
+
+
+11.2 TIPO J (HIERRO-CONSTANTÁN)
+--------------------------------
+Termopar para la industria del hierro/acero y atmósferas reductoras.
+
+Materiales:
+  Positivo (+): Hierro (Fe)
+  Negativo (-): Constantán (55% Cobre, 45% Níquel)
+
+Especificaciones:
+  Rango de temperatura: -210°C a +1200°C
+  Sensibilidad a 0°C: ~52 µV/°C (la más alta)
+  Código de color: Negro
+  Estándar: IEC 60584, ASTM E230
+
+Aplicaciones:
+  - Industria del hierro y acero
+  - Atmósferas reductoras
+  - Aplicaciones con presupuesto limitado
+  - Equipos heredados
+
+Ventajas:
+  + Alta sensibilidad
+  + Muy bajo costo
+  + Bueno para temperaturas medias
+
+Desventajas:
+  - Oxidación rápida por encima de 540°C
+  - No para atmósferas oxidantes
+  - Rango más limitado que Tipo K
+
+
+11.3 TIPO T (COBRE-CONSTANTÁN)
+-------------------------------
+Termopar para criogenia y aplicaciones de laboratorio.
+
+Materiales:
+  Positivo (+): Cobre (Cu)
+  Negativo (-): Constantán (55% Cobre, 45% Níquel)
+
+Especificaciones:
+  Rango de temperatura: -270°C a +400°C
+  Sensibilidad a 0°C: ~41 µV/°C
+  Código de color: Azul
+  Estándar: IEC 60584, ASTM E230
+
+Aplicaciones:
+  - Criogenia y bajas temperaturas
+  - Industria alimentaria
+  - Laboratorio e investigación
+  - Ambientes corrosivos
+
+Ventajas:
+  + Excelente para bajas temperaturas
+  + Muy buena linealidad
+  + Resistente a la humedad
+  + Buena precisión
+
+Desventajas:
+  - Rango limitado (máx. 400°C)
+  - El cobre se oxida por encima de 400°C
+
+
+11.4 TIPO E (CHROMEL-CONSTANTÁN)
+---------------------------------
+Termopar con la sensibilidad más alta (máxima salida).
+
+Materiales:
+  Positivo (+): Chromel (90% Níquel, 10% Cromo)
+  Negativo (-): Constantán (55% Cobre, 45% Níquel)
+
+Especificaciones:
+  Rango de temperatura: -270°C a +1000°C
+  Sensibilidad a 0°C: ~61 µV/°C (¡máxima!)
+  Código de color: Púrpura
+  Estándar: IEC 60584, ASTM E230
+
+Aplicaciones:
+  - Criogenia
+  - Generación de energía
+  - Detección precisa de pequeños cambios
+
+Ventajas:
+  + Máxima sensibilidad (señal grande)
+  + Excelente relación señal-ruido
+  + Buena resistencia a la corrosión
+
+Desventajas:
+  - Mayor costo
+  - Menos utilizado (disponibilidad limitada)
+
+
+11.5 TIPO N (NICROSIL-NISIL)
+-----------------------------
+Termopar moderno con estabilidad mejorada a altas temperaturas.
+
+Materiales:
+  Positivo (+): Nicrosil (84.4% Ni, 14.2% Cr, 1.4% Si)
+  Negativo (-): Nisil (95.5% Ni, 4.4% Si, 0.1% Mg)
+
+Especificaciones:
+  Rango de temperatura: -270°C a +1300°C
+  Sensibilidad a 0°C: ~27 µV/°C
+  Código de color: Naranja
+  Estándar: IEC 60584
+
+Aplicaciones:
+  - Reemplazo del Tipo K (mejor estabilidad)
+  - Altas temperaturas
+  - Atmósferas oxidantes
+
+Ventajas:
+  + Estabilidad superior al Tipo K
+  + Sin deriva magnética
+  + Excelente resistencia a la oxidación
+
+Desventajas:
+  - Mayor costo que el Tipo K
+  - Menor sensibilidad
+
+
+11.6 TIPO S, R, B (METALES NOBLES - PLATINO)
+---------------------------------------------
+Termopares de platino para temperaturas muy altas y máxima precisión.
+
+TIPO S: Platino-Platino/Rodio 10%
+  Rango: -50°C a +1768°C
+  Sensibilidad: ~6 µV/°C
+  Aplicaciones: Farmacéutica, biotecnología, estándares de laboratorio
+
+TIPO R: Platino-Platino/Rodio 13%
+  Rango: -50°C a +1768°C
+  Sensibilidad: ~6 µV/°C
+  Aplicaciones: Estándares de calibración, temperaturas muy altas
+
+TIPO B: Platino/Rodio 30%-Platino/Rodio 6%
+  Rango: +200°C a +1820°C
+  Sensibilidad: ~1 µV/°C (¡muy baja!)
+  Aplicaciones: Fabricación de vidrio, hornos muy calientes
+
+Ventajas:
+  + Máxima precisión
+  + Excelente estabilidad
+  + Temperaturas extremas
+
+Desventajas:
+  - Costo extremadamente alto
+  - Muy baja sensibilidad (ruido)
+  - Frágil (requiere protección)
+
+
+12. CÁLCULOS Y ECUACIONES DE TERMOPARES
+--------------------------------------------
+
+12.1 POLINOMIOS NIST ITS-90
+----------------------------
+El estándar NIST (Instituto Nacional de Estándares y Tecnología) define
+polinomios de alta precisión para conversión temperatura ↔ voltaje.
+
+Forma general para TEMPERATURA → VOLTAJE:
+
+  V(T) = c₀ + c₁·T + c₂·T² + c₃·T³ + ... + cₙ·Tⁿ
+
+Donde:
+  V = Voltaje en milivoltios (mV)
+  T = Temperatura en grados Celsius (°C)
+  c₀, c₁, ..., cₙ = Coeficientes polinómicos específicos del tipo
+
+Para Tipo K (0°C a 1372°C):
+  V(T) = c₀ + c₁·T + c₂·T² + ... + c₉·T⁹ + a₀·exp[a₁(T-a₂)²]
+
+  Coeficientes (primeros 5):
+    c₀ = -0.176004136860 x 10⁻¹
+    c₁ =  0.389212049750 x 10⁻¹
+    c₂ =  0.185587700320 x 10⁻⁴
+    c₃ = -0.994575928740 x 10⁻⁷
+    c₄ =  0.318409457190 x 10⁻⁹
+    ...más término exponencial
+
+
+12.2 COMPENSACIÓN DE UNIÓN FRÍA
+--------------------------------
+Los termopares miden la diferencia de temperatura entre dos uniones.
+Para obtener la temperatura absoluta, debe compensarse la temperatura de la
+unión fría (Compensación de Unión Fría - CJC).
+
+Temperatura medida = Temperatura calculada de V + Temperatura de unión fría
+
+Métodos CJC:
+1. Baño de hielo a 0°C (laboratorio)
+2. Sensor RTD/termistor en la unión (industrial)
+3. Compensación electrónica (circuitos especializados)
+
+En RTD Master Pro:
+- El usuario puede establecer manualmente la temperatura de unión fría
+- Valor predeterminado: 25°C (temperatura ambiente)
+- Cálculo automático con compensación
+
+
+12.3 CÁLCULO INVERSO (VOLTAJE → TEMPERATURA)
+---------------------------------------------
+Para conversión inversa, se utiliza el método de Newton-Raphson para resolver
+la ecuación polinómica iterativamente.
+
+Algoritmo:
+1. Compensación CJC: V_compensado = V_medido + V(T_unión_fría)
+2. Estimación inicial: T₀ = 0°C
+3. Iteración de Newton-Raphson:
+   T_(n+1) = T_n - [V(T_n) - V_compensado] / [dV/dT(T_n)]
+4. Repetir hasta convergencia (|T_(n+1) - T_n| < tolerancia)
+
+
+13. USO DE TERMOPARES EN RTD MASTER PRO
+-------------------------------------------
+
+13.1 SELECCIÓN DEL MODO TERMOPAR
+---------------------------------
+1. Abrir RTD Master Pro
+2. En la sección "Modo de Medición", seleccionar "Termopar"
+3. La interfaz cambiará para mostrar controles específicos de termopar
+
+13.2 CONFIGURACIÓN DE TERMOPAR
+-------------------------------
+1. Tipo: Seleccionar tipo de termopar (K, J, T, E, N, S, R, B)
+2. Rango: Se muestra automáticamente para el tipo seleccionado
+3. Sensibilidad: Se muestra automáticamente (µV/°C)
+4. Temp. Unión Fría: Establecer temperatura de unión fría (predeterminado 25°C)
+
+13.3 CONVERSIONES SOPORTADAS
+-----------------------------
+
+MODO 1: TEMPERATURA → VOLTAJE
+  Entrada: Temperatura en °C
+  Salida: Voltaje en mV
+  Ejemplo Tipo K:
+    500°C → 20.644 mV
+
+MODO 2: VOLTAJE → TEMPERATURA
+  Entrada: Voltaje en mV
+  Salida: Temperatura en °C (con compensación CJC)
+  Ejemplo Tipo K:
+    20.644 mV (CJC=25°C) → ~500°C
+
+13.4 EJEMPLOS PRÁCTICOS
+-----------------------
+
+Ejemplo 1: Medición de temperatura de horno con Tipo K
+  - Voltaje medido: 35.2 mV
+  - Unión fría: 23°C
+  - Seleccionar: Tipo K, Voltaje → Temperatura
+  - Entrada: 35.2 mV, CJC: 23°C
+  - Salida: ~852°C
+
+Ejemplo 2: Calcular voltaje esperado Tipo J
+  - Temperatura del horno: 600°C
+  - Seleccionar: Tipo J, Temperatura → Voltaje
+  - Entrada: 600°C
+  - Salida: ~33.277 mV
+
+
+================================================================================
+ANEXO B: FÓRMULAS DE REFERENCIA RÁPIDA DE TERMOPARES
+================================================================================
+
+TIPO K (0°C a 500°C - aproximación simplificada):
+  V(T) ≈ 0.04 mV/°C × T
+  Ejemplo: 100°C → ~4.0 mV
+
+TIPO J (0°C a 500°C):
+  V(T) ≈ 0.05 mV/°C × T
+  Ejemplo: 100°C → ~5.0 mV
+
+TIPO T (0°C a 200°C):
+  V(T) ≈ 0.04 mV/°C × T
+  Ejemplo: 100°C → ~4.0 mV
+
+Nota: Estas son aproximaciones lineales. Para máxima precisión,
+      la aplicación utiliza los polinomios completos NIST ITS-90.
+
+
+================================================================================
+REFERENCIAS ADICIONALES DE TERMOPARES
+================================================================================
+
+[7] IEC 60584-1:2013
+    "Termopares - Parte 1: Especificaciones de FEM y tolerancias"
+    Comisión Electrotécnica Internacional, 2013
+
+[8] ASTM E230/E230M-17
+    "Especificación Estándar y Tablas de Temperatura-Fuerza Electromotriz (FEM)
+     para Termopares Estandarizados"
+    ASTM International, 2017
+
+[9] Base de Datos de Termopares NIST ITS-90
+    https://srdata.nist.gov/its90/main/
+    Instituto Nacional de Estándares y Tecnología
+
+[10] Manual sobre el Uso de Termopares en Medición de Temperatura
+     Serie de Manuales ASTM MNL 12, Cuarta Edición, 1993
+
+================================================================================
+FIN DE LA DOCUMENTACIÓN TÉCNICA
+================================================================================
